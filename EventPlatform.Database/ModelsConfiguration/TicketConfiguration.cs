@@ -1,0 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using EventPlatform.Domain.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore;
+
+namespace EventPlatform.Database.ModelsConfiguration
+{
+    public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
+    {
+        public void Configure(EntityTypeBuilder<Ticket> builder)
+        {
+            builder.ToTable("tickets");
+
+            builder.HasKey(t => t.Id);
+            builder.Property(t => t.Id)
+                .HasColumnName("id");
+
+            builder.Property(t => t.Title)
+                .HasColumnName("title")
+                .HasMaxLength(100)
+                .IsRequired();
+
+            builder.Property(t => t.Price)
+                .HasColumnName("price")
+                .HasColumnType("numeric(10,2)");
+
+            builder.HasMany(t => t.UserTickets)
+                .WithOne(ut => ut.Ticket)
+                .HasForeignKey(t => t.TicketId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+        }
+    }
+}
