@@ -81,6 +81,7 @@ namespace EventPlatform.WebApi.Controllers
         [HttpGet("SendConfirmationCode")]
         public async Task<IActionResult> SendConfirmationCode([FromQuery] string email, CancellationToken ct)
         {
+            //Миша добавил простейшую валидацию чтобы с пустым полем не робило какую нашел в интернете если нужна другая и эта мазолит тебе глаза не меняй я сам разберусь и сделаю чето другое
             if (string.IsNullOrWhiteSpace(email))
                 return BadRequest("Email is required");
            
@@ -88,7 +89,7 @@ namespace EventPlatform.WebApi.Controllers
            
             string subject = "Код подтверждения";
             string content = $"{code}";
-
+            
             await _jobScheduler.ScheduleEmailSend(DateTimeOffset.Now.AddSeconds(6), email, subject, content, ct);
 
             return Ok(code);
