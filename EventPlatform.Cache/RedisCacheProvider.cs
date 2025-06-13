@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+﻿using System.Text.Json;
+using EventPlatform.Application.Interfaces.Infrastructure;
 using StackExchange.Redis;
 
 namespace EventPlatform.Cache

@@ -1,4 +1,4 @@
-﻿namespace EventPlatform.BackgroundScheduller
+﻿namespace EventPlatform.Application.Interfaces.Infrastructure
 {
     public interface IQuartzJobScheduler
     {

@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPlatform.WebApi", "EventPlatform.WebApi\EventPlatform.WebApi.csproj", "{B3B525CE-EB6C-41B3-8232-B6CB747A673F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E0703CAD-F288-4614-A25F-780673C4A853} = {E0703CAD-F288-4614-A25F-780673C4A853}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}"
 EndProject

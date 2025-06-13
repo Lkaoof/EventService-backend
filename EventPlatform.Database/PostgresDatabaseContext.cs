@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Reflection.Emit;
 using AppAny.Quartz.EntityFrameworkCore.Migrations;
 using AppAny.Quartz.EntityFrameworkCore.Migrations.PostgreSQL;
 using EventPlatform.Application.Interfaces.Infrastructure;
@@ -27,7 +26,7 @@ namespace EventPlatform.Database
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         public DbSet<Role> Roles { get; set; }
-
+         
         public DbSet<Ticket> Tickets { get; set; }
 
         public DbSet<UserTicket> UsersTickets { get; set; }

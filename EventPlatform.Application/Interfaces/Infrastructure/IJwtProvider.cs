@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using EventPlatform.Domain.Models;
 
-namespace EventPlatform.JwtProvider
+namespace EventPlatform.Application.Interfaces.Infrastructure
 {
     public interface IJwtProvider
     {

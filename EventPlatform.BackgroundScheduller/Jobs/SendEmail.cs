@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EventPlatform.EmailProvider;
+﻿using EventPlatform.Application.Interfaces.Infrastructure;
 using Quartz;
 
 namespace EventPlatform.BackgroundScheduller.Jobs

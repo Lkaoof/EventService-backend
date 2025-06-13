@@ -1,11 +1,10 @@
-﻿using EventPlatform.Application.Interfaces.Application;
+﻿using EventPlatform.Application.Features.Users.Command.DeleteUserById;
+using EventPlatform.Application.Features.Users.Query.GetUsers;
 using EventPlatform.Application.Interfaces.Infrastructure;
 using EventPlatform.Application.Models.Pagination;
-using EventPlatform.BackgroundScheduller;
-using EventPlatform.EmailProvider;
 using EventPlatform.WebApi.Common;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace EventPlatform.WebApi.Controllers
 {
@@ -14,47 +13,50 @@ namespace EventPlatform.WebApi.Controllers
     [Route("/[controller]")]
     public class UsersController : ControllerApiBase
     {
+        private readonly ICache _cache;
+        private readonly IMediator _mediator;
         private readonly IDatabaseContext _db;
         private readonly IEmailSender _emailSender;
         private readonly IQuartzJobScheduler _jobScheduler;
-        private readonly IUserService _userService;
 
-        public UsersController(IDatabaseContext db, IEmailSender emailSender, IQuartzJobScheduler jobScheduler, IUserService userService)
+        public UsersController(ICache cache, IMediator mediator, IDatabaseContext db, IEmailSender emailSender, IQuartzJobScheduler jobScheduler)
         {
+            _cache = cache;
+            _mediator = mediator;
             _db = db;
             _emailSender = emailSender;
             _jobScheduler = jobScheduler;
-            _userService = userService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetUsers(CancellationToken ct)
         {
-            return Ok(await _db.Users.ToListAsync(ct));
+            return Ok(await _mediator.Send(new GetUsersQuery()));
         }
 
         [HttpGet("page")]
         public async Task<IActionResult> GetUsersAsPage([FromQuery] Pageable page, CancellationToken ct)
         {
-            return Ok(await _userService.GetUsersAsPage(page, ct));
+            return Ok();
         }
 
         [HttpGet("metadata")]
         public async Task<IActionResult> GetUsersMetadata(CancellationToken ct)
         {
-            return Ok(await _userService.GetUsersMetadata(ct));
+            return Ok();
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(Guid id, CancellationToken ct)
         {
-            return Ok(await _userService.GetUserById(id, ct));
+            return Ok();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DropUser(Guid id, CancellationToken ct)
         {
-            await _userService.DeleteUserById(id, ct);
+            //await _userService.DeleteUserById(id, ct);
+            await _mediator.Send(new DeleteUserByIdCommand() { Id = id }, ct);
             return Ok();
         }
 

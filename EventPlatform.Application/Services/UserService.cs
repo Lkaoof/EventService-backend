@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EventPlatform.Application.Extentions;
-using EventPlatform.Application.Interfaces.Application;
+﻿using EventPlatform.Application.Extentions;
+using EventPlatform.Application.Interfaces.Infrastructure;
 using EventPlatform.Application.Models.Pagination;
-using EventPlatform.Cache;
+using EventPlatform.Application.Repositories;
 using EventPlatform.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventPlatform.Application.Services
 {
-    public class UserService : IUserService
+    public class UserService 
     {
-        private readonly IUserRepository _userRepository;
+        private readonly UserRepository _userRepository;
         private readonly ICache _cache;
         private static readonly TimeSpan _cacheExpiration = TimeSpan.FromSeconds(10);
-        public UserService(IUserRepository userRepository, ICache cache)
+
+        public UserService(UserRepository userRepository, ICache cache)
         {
             _userRepository = userRepository;
             _cache = cache;
@@ -25,31 +21,31 @@ namespace EventPlatform.Application.Services
 
         public async Task<EntityMetadata> GetUsersMetadata(CancellationToken ct = default)
         {
-            var count = await _userRepository.GetUsersAsQueryable(ct).CountAsync(ct);
+            var count = await _userRepository.GetAsQueryable(ct).CountAsync(ct);
             return new EntityMetadata { TotalCount = count };
         }
 
         public async Task<User?> GetUserById(Guid id, CancellationToken ct = default)
         {
-            var fetch = async () => await _userRepository.GetUserByIdAsync(id, ct);
+            var fetch = async () => await _userRepository.GetByIdAsync(id, ct);
             return await _cache.GetOrSetAsync($"user-{id}", fetch, _cacheExpiration, ct);
         }
 
         public async Task<Page<User>> GetUsersAsPage(Pageable page, CancellationToken ct = default)
         {
-            return await _userRepository.GetUsersAsQueryable(ct).PaginateAsync(page);
+            return await _userRepository.GetAsQueryable(ct).PaginateAsync(page);
         }
 
         public async Task<IEnumerable<User>> GetUsers(CancellationToken ct = default)
         {
-            var fetch = () => _userRepository.GetUsersAsync(ct);
+            var fetch = () => _userRepository.GetAsync(ct);
             return await _cache.GetOrSetAsync($"users", fetch);
         }
 
         public async Task DeleteUserById(Guid id, CancellationToken ct = default)
         {
             Invalidate($"user-{id}", ct);
-            await _userRepository.DeleteUserByIdAsync(id, ct);
+            await _userRepository.DeleterByIdAsync(id, ct);
         }
 
         private async void Invalidate(string key, CancellationToken ct = default)

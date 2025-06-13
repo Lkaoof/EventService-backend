@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EventPlatform.Domain.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using EventPlatform.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EventPlatform.Database.ModelsConfiguration
 {

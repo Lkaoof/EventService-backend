@@ -1,4 +1,5 @@
-﻿using MailKit.Net.Smtp;
+﻿using EventPlatform.Application.Interfaces.Infrastructure;
+using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
 

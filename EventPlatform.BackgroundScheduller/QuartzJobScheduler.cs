@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EventPlatform.Application.Interfaces.Infrastructure;
 using EventPlatform.BackgroundScheduller.Jobs;
-using EventPlatform.Domain.Models;
 using Microsoft.Extensions.Logging;
 using Quartz;
-using static Quartz.Logging.OperationName;
 
 namespace EventPlatform.BackgroundScheduller
 {

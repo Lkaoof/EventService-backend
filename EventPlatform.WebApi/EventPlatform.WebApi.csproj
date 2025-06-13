@@ -1,36 +1,43 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>e3f0314d-34ce-4872-9d75-235988e852d6</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>e3f0314d-34ce-4872-9d75-235988e852d6</UserSecretsId>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="EntityGraphQL.AspNet" Version="5.6.1" />
-    <PackageReference Include="GraphQL.Server.Ui.Altair" Version="8.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.4" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Remove="Properties\launchSettings.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\EventPlatform.Application\EventPlatform.Application.csproj" />
-    <ProjectReference Include="..\EventPlatform.BackgroundScheduller\EventPlatform.BackgroundScheduller.csproj" />
-    <ProjectReference Include="..\EventPlatform.Cache\EventPlatform.Cache.csproj" />
-    <ProjectReference Include="..\EventPlatform.Database\EventPlatform.Database.csproj" />
-    <ProjectReference Include="..\EventPlatform.EmailProvider\EventPlatform.Email.csproj" />
-    <ProjectReference Include="..\EventPlatform.JwtProvider\EventPlatform.Jwt.csproj" />
-    <ProjectReference Include="..\EventPlatform.NotificationProvider\EventPlatform.Notification.csproj" />
-    <ProjectReference Include="..\EventPlatform.Payments\EventPlatform.Payments.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="Properties\launchSettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="EntityGraphQL.AspNet" Version="5.6.1" />
+		<PackageReference Include="GraphQL.Server.Ui.Altair" Version="8.2.0" />
+		<PackageReference Include="MediatR" Version="12.5.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\EventPlatform.Application\EventPlatform.Application.csproj" />
+		<ProjectReference Include="..\EventPlatform.BackgroundScheduller\EventPlatform.BackgroundScheduller.csproj" />
+		<ProjectReference Include="..\EventPlatform.Cache\EventPlatform.Cache.csproj" />
+		<ProjectReference Include="..\EventPlatform.Database\EventPlatform.Database.csproj" />
+		<ProjectReference Include="..\EventPlatform.EmailProvider\EventPlatform.Email.csproj" />
+		<ProjectReference Include="..\EventPlatform.JwtProvider\EventPlatform.Jwt.csproj" />
+		<ProjectReference Include="..\EventPlatform.NotificationProvider\EventPlatform.Notification.csproj" />
+		<ProjectReference Include="..\EventPlatform.Payments\EventPlatform.Payments.csproj" />
+	</ItemGroup>
 
 </Project>

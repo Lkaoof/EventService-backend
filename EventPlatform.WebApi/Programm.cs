@@ -1,78 +1,70 @@
-using System.Text;
+п»їusing System.Text;
 using EntityGraphQL.AspNet;
 using EventPlatform.Application;
-using EventPlatform.Application.Interfaces.Infrastructure;
 using EventPlatform.BackgroundScheduller;
 using EventPlatform.Cache;
 using EventPlatform.Database;
 using EventPlatform.Email;
 using GraphQL.Server.Ui.Altair;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
 var services = builder.Services;
 var config = builder.Configuration;
 
 services.AddControllers();
 services.AddOpenApi();
 services.AddEndpointsApiExplorer();
-
-//services.AddGraphQLSchema<PostgresDatabaseContext>();
-
+services.AddGraphQLSchema<PostgresDatabaseContext>();
 services.AddContext(config);
 services.AddCache(config);
 services.AddEmailSender(config);
 services.AddBackgroundScheduler(config);
 services.AddApplication(config);
 //services.AddApplication(config);
-
 //services.AddJwtProvider(config);
-
 //services.AddPasswordHasher(config);
-
 
 var JwtOptions = config.GetSection("JwtOptions");
 services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
-{
-    opt.TokenValidationParameters = new()
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = JwtOptions["Issuer"],
-        ValidAudience = JwtOptions["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtOptions["SecretKey"]!)),
-        ClockSkew = TimeSpan.Zero
-    };
-
-    opt.Events = new()
-    {
-        OnMessageReceived = context =>
         {
-            string token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last() ?? string.Empty;
-
-            //var token = context.Request.Cookies[JwtOptions["CookieName"] ?? "RefreshToken"];
-
-            if (!string.IsNullOrEmpty(token))
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
+        {
+            opt.TokenValidationParameters = new()
             {
-                context.Token = token;
-            }
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = JwtOptions["Issuer"],
+                ValidAudience = JwtOptions["Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtOptions["SecretKey"]!)),
+                ClockSkew = TimeSpan.Zero
+            };
 
-            return Task.CompletedTask;
-        }
-    };
-});
+            opt.Events = new()
+            {
+                OnMessageReceived = context =>
+                {
+                    string token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last() ?? string.Empty;
+
+                    //var token = context.Request.Cookies[JwtOptions["CookieName"] ?? "RefreshToken"];
+
+                    if (!string.IsNullOrEmpty(token))
+                    {
+                        context.Token = token;
+                    }
+
+                    return Task.CompletedTask;
+                }
+            };
+        });
 
 
 services.AddSwaggerGen(c =>
@@ -95,7 +87,7 @@ services.AddSwaggerGen(c =>
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
+{
         {
             new OpenApiSecurityScheme
             {
@@ -107,19 +99,19 @@ services.AddSwaggerGen(c =>
             },
             Array.Empty<string>()
         }
-    });
+});
 });
 
 services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", builder =>
     {
-        // localhost:5500 - адрес, который находитс¤ в загроовке запроса "Origin".
-        // в текущей конфигурации cookie same-site=lax, cookie будут передаватьс¤ в кросс-доменных запросах “ќЋ№ ќ при GET запросах.
-        // например, если клиент запущен на localhost:5500 и сервер на localhost:5001, то cookie будут передаватьс¤ и при POST запросах.
-        // если клиент запущен на 127.0.0.1:5500 и сервер на localhost:5001, то возникнет ошибка  CORS, т.к. 127.0.0.1:5500 != localhost:5500,
-        // можно установить параметр same-site=none, тогда cookie будут передаватьс¤ на любой домен и при этом cookie должен иметь флаг secure,
-        // если указать same-site=none без secure, браузер проигнорирует такой cookie.
+        // localhost:5500 - Р°РґСЂРµСЃ, РєРѕС‚РѕСЂС‹Р№ РЅР°С…РѕРґРёС‚СЃВ¤ РІ Р·Р°РіСЂРѕРѕРІРєРµ Р·Р°РїСЂРѕСЃР° "Origin".
+        // РІ С‚РµРєСѓС‰РµР№ РєРѕРЅС„РёРіСѓСЂР°С†РёРё cookie same-site=lax, cookie Р±СѓРґСѓС‚ РїРµСЂРµРґР°РІР°С‚СЊСЃВ¤ РІ РєСЂРѕСЃСЃ-РґРѕРјРµРЅРЅС‹С… Р·Р°РїСЂРѕСЃР°С… вЂњСњР‹в„–В Сњ РїСЂРё GET Р·Р°РїСЂРѕСЃР°С….
+        // РЅР°РїСЂРёРјРµСЂ, РµСЃР»Рё РєР»РёРµРЅС‚ Р·Р°РїСѓС‰РµРЅ РЅР° localhost:5500 Рё СЃРµСЂРІРµСЂ РЅР° localhost:5001, С‚Рѕ cookie Р±СѓРґСѓС‚ РїРµСЂРµРґР°РІР°С‚СЊСЃВ¤ Рё РїСЂРё POST Р·Р°РїСЂРѕСЃР°С….
+        // РµСЃР»Рё РєР»РёРµРЅС‚ Р·Р°РїСѓС‰РµРЅ РЅР° 127.0.0.1:5500 Рё СЃРµСЂРІРµСЂ РЅР° localhost:5001, С‚Рѕ РІРѕР·РЅРёРєРЅРµС‚ РѕС€РёР±РєР°  CORS, С‚.Рє. 127.0.0.1:5500 != localhost:5500,
+        // РјРѕР¶РЅРѕ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїР°СЂР°РјРµС‚СЂ same-site=none, С‚РѕРіРґР° cookie Р±СѓРґСѓС‚ РїРµСЂРµРґР°РІР°С‚СЊСЃВ¤ РЅР° Р»СЋР±РѕР№ РґРѕРјРµРЅ Рё РїСЂРё СЌС‚РѕРј cookie РґРѕР»Р¶РµРЅ РёРјРµС‚СЊ С„Р»Р°Рі secure,
+        // РµСЃР»Рё СѓРєР°Р·Р°С‚СЊ same-site=none Р±РµР· secure, Р±СЂР°СѓР·РµСЂ РїСЂРѕРёРіРЅРѕСЂРёСЂСѓРµС‚ С‚Р°РєРѕР№ cookie.
         builder.WithOrigins("http://localhost:5500")
                .AllowAnyHeader()
                .AllowAnyMethod()
@@ -137,12 +129,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-//app.MapGraphQL<PostgresDatabaseContext>();
-//app.MapGraphQLAltair(options: new AltairOptions
-//{
-//    GraphQLEndPoint = "/graphql",
-//});
-
+app.MapGraphQL<PostgresDatabaseContext>();
+app.MapGraphQLAltair(options: new AltairOptions
+{
+    GraphQLEndPoint = "/graphql",
+});
 
 app.UseExceptionHandler(errorApp =>
 {
@@ -179,11 +170,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
+        c.DisplayRequestDuration();
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
         c.RoutePrefix = string.Empty;
     });
     app.MapOpenApi();
 }
-
-
 app.Run();

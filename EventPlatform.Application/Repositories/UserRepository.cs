@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EventPlatform.Application.Extentions;
-using EventPlatform.Application.Interfaces.Application;
-using EventPlatform.Application.Interfaces.Infrastructure;
-using EventPlatform.Cache;
+﻿using EventPlatform.Application.Interfaces.Infrastructure;
 using EventPlatform.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventPlatform.Application.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository 
     {
         private readonly IDatabaseContext _context;
 
@@ -21,22 +13,32 @@ namespace EventPlatform.Application.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<User>> GetUsersAsync(CancellationToken ct = default)
+        public async Task<IEnumerable<User>> GetAsync(CancellationToken ct = default)
         {
             return await _context.Users.ToListAsync(ct);
         }
 
-        public IQueryable<User> GetUsersAsQueryable(CancellationToken ct = default)
+        public IQueryable<User> GetAsQueryable(CancellationToken ct = default)
         {
             return _context.Users.AsQueryable();
         }
 
-        public async Task<User?> GetUserByIdAsync(Guid id, CancellationToken ct = default)
+        public async Task<User?> GetByIdAsync(Guid id, CancellationToken ct = default)
         {
             return await _context.Users.FindAsync(id, ct);
         }
 
-        public async Task DeleteUserByIdAsync(Guid id, CancellationToken ct = default)
+        public void Create(User user)
+        {
+
+        }
+
+        public void Update(User user)
+        {
+            _context.Users.Update(user);
+        }
+
+        public async Task DeleterByIdAsync(Guid id, CancellationToken ct = default)
         {
             await _context.Users
                 .Where(u => u.Id == id)

@@ -1,5 +1,4 @@
-﻿
-namespace EventPlatform.Cache
+﻿namespace EventPlatform.Application.Interfaces.Infrastructure
 {
     public interface ICache
     {

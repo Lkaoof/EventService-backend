@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EventPlatform.Application.Models.Pagination;
+﻿using EventPlatform.Application.Models.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventPlatform.Application.Extentions

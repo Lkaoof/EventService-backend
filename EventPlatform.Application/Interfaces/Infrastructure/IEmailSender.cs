@@ -1,6 +1,4 @@
-﻿
-
-namespace EventPlatform.EmailProvider
+﻿namespace EventPlatform.Application.Interfaces.Infrastructure
 {
     public interface IEmailSender
     {
