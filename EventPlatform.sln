@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPlatform.Payments", "E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPlatform.BackgroundScheduller", "EventPlatform.BackgroundScheduller\EventPlatform.BackgroundScheduller.csproj", "{B09A0B15-B3A5-498B-9C7A-D4D435F2A7A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPlatform.RandomCodeGeneration", "EventPlatform.RandomCodeGeneration\EventPlatform.RandomCodeGeneration.csproj", "{D09D1F18-65E1-4ADE-814A-A255E4BEFDD8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,10 @@ Global
 		{B09A0B15-B3A5-498B-9C7A-D4D435F2A7A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B09A0B15-B3A5-498B-9C7A-D4D435F2A7A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B09A0B15-B3A5-498B-9C7A-D4D435F2A7A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D09D1F18-65E1-4ADE-814A-A255E4BEFDD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D09D1F18-65E1-4ADE-814A-A255E4BEFDD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D09D1F18-65E1-4ADE-814A-A255E4BEFDD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D09D1F18-65E1-4ADE-814A-A255E4BEFDD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +96,7 @@ Global
 		{721FA464-8539-40B6-B266-625E60410AAF} = {2BC905A5-63DE-4BA1-99AF-33CFADFE5664}
 		{D275F0EC-34FA-45B8-AA58-BE04619D8F1C} = {2BC905A5-63DE-4BA1-99AF-33CFADFE5664}
 		{B09A0B15-B3A5-498B-9C7A-D4D435F2A7A2} = {2BC905A5-63DE-4BA1-99AF-33CFADFE5664}
+		{D09D1F18-65E1-4ADE-814A-A255E4BEFDD8} = {2BC905A5-63DE-4BA1-99AF-33CFADFE5664}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8A697D9D-D2C4-4237-ACA2-E2A4E5F00197}

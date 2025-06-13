@@ -10,11 +10,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using EventPlatform.RandomCodeGeneration;
+
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var config = builder.Configuration;
 
+services.AddCodeGeneration(config);
 services.AddControllers();
 services.AddOpenApi();
 services.AddEndpointsApiExplorer();

@@ -4,7 +4,9 @@ using EventPlatform.Application.Interfaces.Infrastructure;
 using EventPlatform.Application.Models.Pagination;
 using EventPlatform.WebApi.Common;
 using MediatR;
+using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc;
+using EventPlatform.RandomCodeGeneration;
 
 namespace EventPlatform.WebApi.Controllers
 {
@@ -18,14 +20,16 @@ namespace EventPlatform.WebApi.Controllers
         private readonly IDatabaseContext _db;
         private readonly IEmailSender _emailSender;
         private readonly IQuartzJobScheduler _jobScheduler;
+        private readonly IRandomCodeGeneration _codeGenerator;
 
-        public UsersController(ICache cache, IMediator mediator, IDatabaseContext db, IEmailSender emailSender, IQuartzJobScheduler jobScheduler)
+        public UsersController(ICache cache, IMediator mediator, IDatabaseContext db, IEmailSender emailSender, IQuartzJobScheduler jobScheduler, IRandomCodeGeneration codeGenerator)
         {
             _cache = cache;
             _mediator = mediator;
             _db = db;
             _emailSender = emailSender;
             _jobScheduler = jobScheduler;
+            _codeGenerator = codeGenerator;
         }
 
         [HttpGet]
@@ -64,8 +68,8 @@ namespace EventPlatform.WebApi.Controllers
         public async Task<IActionResult> SendImail(string email, string subject, string content, CancellationToken ct)
         {
             //await _emailSender.SendAsync(email, subject, content, ct);
-            //await _jobScheduler.ScheduleEmailSend(DateTimeOffset.Now.Add(TimeSpan.FromSeconds(5)), email, subject, content, ct);
-            await _jobScheduler.ScheduleAwait(DateTimeOffset.Now.Add(TimeSpan.FromSeconds(5)), Guid.NewGuid(), Guid.NewGuid());
+            await _jobScheduler.ScheduleEmailSend(DateTimeOffset.Now.Add(TimeSpan.FromSeconds(10)), email, subject, content, ct);
+            //await _jobScheduler.ScheduleAwait(DateTimeOffset.Now.Add(TimeSpan.FromSeconds(5)), Guid.NewGuid(), Guid.NewGuid());
             return Ok("Sended!");
         }
 
@@ -73,6 +77,23 @@ namespace EventPlatform.WebApi.Controllers
         public async Task<IActionResult> ScheduleJob(CancellationToken ct)
         {
             return Ok();
+        }
+        [HttpGet("SendConfirmationCode")]
+        public async Task<IActionResult> SendConfirmationCode([FromQuery] string email, CancellationToken ct)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return BadRequest("Email is required");
+           
+            string code = _codeGenerator.GenerateRandomCode(6, true,true);
+           
+            string subject = "Код подтверждения";
+            string content = $"{code}";
+
+            await _jobScheduler.ScheduleEmailSend(DateTimeOffset.Now.AddSeconds(6), email, subject, content, ct);
+
+            return Ok(code);
+            //return Ok("Sended!");
+
         }
     }
 }

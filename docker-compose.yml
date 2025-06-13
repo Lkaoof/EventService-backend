@@ -12,5 +12,50 @@ services:
      - "8080:8080"
      - "3025:3025"
    networks:
-     - greenmail
+     - backend
    restart: unless-stopped
+  redis:
+    container_name: event_redis
+    image: redis:8-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - event_redis_data:/data
+    command: redis-server --requirepass prettypass
+    restart: unless-stopped
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      
+  postgres:
+    container_name: event_postgres
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: "event_platform"
+      POSTGRES_USER: "dev"
+      POSTGRES_PASSWORD: "coolprettypass"
+    restart: unless-stopped
+    ports:
+      - "5444:5432"
+    command: -p 5432
+    volumes:
+      - event_pg_data:/var/lib/postgresql/data
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d livelib"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  event_redis_data:
+  event_pg_data:
+
+networks:
+  backend:
+    driver: bridge

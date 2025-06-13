@@ -38,6 +38,7 @@
 		<ProjectReference Include="..\EventPlatform.JwtProvider\EventPlatform.Jwt.csproj" />
 		<ProjectReference Include="..\EventPlatform.NotificationProvider\EventPlatform.Notification.csproj" />
 		<ProjectReference Include="..\EventPlatform.Payments\EventPlatform.Payments.csproj" />
+		<ProjectReference Include="..\EventPlatform.RandomCodeGeneration\EventPlatform.RandomCodeGeneration.csproj" />
 	</ItemGroup>
 
 </Project>
