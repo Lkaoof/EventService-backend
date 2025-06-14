@@ -6,6 +6,7 @@
         Task BytesSetAsync(string key, byte[] value, CancellationToken ct, TimeSpan? expiry = null);
         Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> fetch, TimeSpan? expiry = null, CancellationToken ct = default);
         Task<T> GetOrSetAsync<T>(string key, Func<T> fetch, TimeSpan? expiry = null, CancellationToken ct = default);
+        Task RemoveKeysMask(string mask);
         Task<T?> ObjectGetAsync<T>(string key, CancellationToken ct);
         Task ObjectSetAsync<T>(string key, T value, CancellationToken ct, TimeSpan? expiry = null);
         Task RemoveAsync(string key, CancellationToken ct);

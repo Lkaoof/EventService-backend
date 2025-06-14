@@ -1,18 +1,25 @@
-﻿namespace EventPlatform.Application.Models.Pagination
+﻿using System.Text.Json.Serialization;
+
+namespace EventPlatform.Application.Models.Application.Pagination
 {
     public class Page<T>
     {
         public int PageIndex { get; }
+
         public IEnumerable<T> Items { get; }
+
         public int Count { get; }
+
         public int Total { get; }
 
-        public Page(IEnumerable<T> items, int pageIndex, int totalItems, int itemsCount)
+        [JsonConstructor]
+        public Page(IEnumerable<T> items, int pageIndex, int total, int count)
         {
             Items = items;
             PageIndex = pageIndex;
-            Total = totalItems;
-            Count = itemsCount;
+            Total = total;
+            Count = count;
         }
     }
+
 }

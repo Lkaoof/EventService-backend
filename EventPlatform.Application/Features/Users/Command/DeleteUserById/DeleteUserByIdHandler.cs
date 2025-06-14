@@ -1,29 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EventPlatform.Application.Common.ResultWrapper;
+using EventPlatform.Application.Features.Common;
 using EventPlatform.Application.Interfaces.Infrastructure;
 using MediatR;
 
 namespace EventPlatform.Application.Features.Users.Command.DeleteUserById
 {
-    public class DeleteUserByIdHandler : IRequestHandler<DeleteUserByIdCommand>
+    public class DeleteUserByIdHandler(IDatabaseContext context, IActions actions) : IRequestHandler<DeleteUserByIdCommand, Result>
     {
-        private readonly IDatabaseContext _context;
-
-        public DeleteUserByIdHandler(IDatabaseContext context)
+        public async Task<Result> Handle(DeleteUserByIdCommand request, CancellationToken cancellationToken)
         {
-            _context = context;
-        }
-        public async Task Handle(DeleteUserByIdCommand request, CancellationToken cancellationToken)
-        {
-            var user = await _context.Users.FindAsync(request.Id, cancellationToken);
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-                await _context.SaveChangesAsync(cancellationToken);
-            }
+            return await actions.DeleteById(context.Users, request.Id, cancellationToken);
         }
     }
 }

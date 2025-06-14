@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EventPlatform.Application.Interfaces.Infrastructure;
+﻿using EventPlatform.Application.Interfaces.Infrastructure;
 using MediatR;
 
 namespace EventPlatform.Application.Common.CacheBehavior
@@ -13,7 +8,7 @@ namespace EventPlatform.Application.Common.CacheBehavior
         public async Task<Response> Handle(Request request, RequestHandlerDelegate<Response> next, CancellationToken cancellationToken)
         {
             foreach (var key in request.CacheKeys)
-                await cache.RemoveAsync(key, cancellationToken);
+                await cache.RemoveKeysMask(key);
 
             return await next(cancellationToken);
         }

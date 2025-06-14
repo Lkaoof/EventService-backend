@@ -26,7 +26,7 @@ namespace EventPlatform.Database
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         public DbSet<Role> Roles { get; set; }
-         
+
         public DbSet<Ticket> Tickets { get; set; }
 
         public DbSet<UserTicket> UsersTickets { get; set; }

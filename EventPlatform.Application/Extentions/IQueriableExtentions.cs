@@ -1,4 +1,4 @@
-﻿using EventPlatform.Application.Models.Pagination;
+﻿using EventPlatform.Application.Models.Application.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventPlatform.Application.Extentions

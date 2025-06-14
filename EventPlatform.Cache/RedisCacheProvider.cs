@@ -11,7 +11,12 @@ namespace EventPlatform.Cache
         public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> fetch, TimeSpan? expiry = null, CancellationToken ct = default)
         {
             var fromCache = await ObjectGetAsync<T>(key, ct);
-            if (fromCache is not null) return fromCache;
+            if (fromCache is not null)
+            {
+                Console.WriteLine("Cache HIT");
+                return fromCache;
+            }
+            Console.WriteLine("Cache MISS");
 
             var fromFetch = await fetch();
             await ObjectSetAsync(key, fromFetch, ct, expiry);
@@ -88,7 +93,21 @@ namespace EventPlatform.Cache
         {
             ValidateKey(key);
             var json = await StringGetAsync(key, ct);
-            return json != null ? JsonSerializer.Deserialize<T>(json) : default;
+            return json != null ? JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            }) : default;
+        }
+
+        public async Task RemoveKeysMask(string mask)
+        {
+            var server = connectionMultiplexer.GetServer(connectionMultiplexer.GetEndPoints().First());
+            var keys = server.Keys(pattern: mask).ToArray();
+
+            if (keys.Length > 0)
+            {
+                await _redis.KeyDeleteAsync(keys);
+            }
         }
 
         private static void ValidateKey(string key)

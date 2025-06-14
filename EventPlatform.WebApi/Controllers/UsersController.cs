@@ -1,7 +1,10 @@
 ﻿using EventPlatform.Application.Features.Users.Command.DeleteUserById;
+using EventPlatform.Application.Features.Users.Command.UpdateUserById;
+using EventPlatform.Application.Features.Users.Query.GetUserById;
 using EventPlatform.Application.Features.Users.Query.GetUsers;
+using EventPlatform.Application.Features.Users.Query.GetUsersAsPage;
 using EventPlatform.Application.Interfaces.Infrastructure;
-using EventPlatform.Application.Models.Pagination;
+using EventPlatform.Application.Models.Application.Pagination;
 using EventPlatform.WebApi.Common;
 using MediatR;
 using Microsoft.AspNetCore.Http.Metadata;
@@ -32,6 +35,7 @@ namespace EventPlatform.WebApi.Controllers
             _codeGenerator = codeGenerator;
         }
 
+
         [HttpGet]
         public async Task<IActionResult> GetUsers(CancellationToken ct)
         {
@@ -41,27 +45,25 @@ namespace EventPlatform.WebApi.Controllers
         [HttpGet("page")]
         public async Task<IActionResult> GetUsersAsPage([FromQuery] Pageable page, CancellationToken ct)
         {
-            return Ok();
-        }
-
-        [HttpGet("metadata")]
-        public async Task<IActionResult> GetUsersMetadata(CancellationToken ct)
-        {
-            return Ok();
+            return Ok(await _mediator.Send(new GetUsersAsPageQuery() { Page = page }));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(Guid id, CancellationToken ct)
         {
-            return Ok();
+            return ToActionResult(await _mediator.Send(new GetUserByIdQuery() { Id = id }, ct));
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DropUser(Guid id, CancellationToken ct)
+        public async Task<IActionResult> DeleteUser(Guid id, CancellationToken ct)
         {
-            //await _userService.DeleteUserById(id, ct);
-            await _mediator.Send(new DeleteUserByIdCommand() { Id = id }, ct);
-            return Ok();
+            return ToActionResult(await _mediator.Send(new DeleteUserByIdCommand() { Id = id }, ct));
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(Guid id, UserUpdateDto user, CancellationToken ct)
+        {
+            return ToActionResult(await _mediator.Send(new UpdateUserCommand() { Id = id, User = user }, ct));
         }
 
         [HttpPost]

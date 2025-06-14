@@ -1,10 +1,12 @@
 ﻿using System.Text;
 using EntityGraphQL.AspNet;
 using EventPlatform.Application;
+using EventPlatform.Application.Interfaces.Infrastructure;
 using EventPlatform.BackgroundScheduller;
 using EventPlatform.Cache;
 using EventPlatform.Database;
 using EventPlatform.Email;
+using EventPlatform.PasswordHasher;
 using GraphQL.Server.Ui.Altair;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
@@ -29,7 +31,7 @@ services.AddBackgroundScheduler(config);
 services.AddApplication(config);
 //services.AddApplication(config);
 //services.AddJwtProvider(config);
-//services.AddPasswordHasher(config);
+services.AddPasswordHasher(config);
 
 var JwtOptions = config.GetSection("JwtOptions");
 services.AddAuthentication(options =>
@@ -159,6 +161,8 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = serviceProvider.GetRequiredService<PostgresDatabaseContext>();
+        var cache = serviceProvider.GetRequiredService<ICache>();
+        await cache.RemoveAsync("users*", default);
         DbInitializer.Initialize(context);
     }
     catch (Exception)

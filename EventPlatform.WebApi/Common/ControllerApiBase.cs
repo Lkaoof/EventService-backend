@@ -1,64 +1,44 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EventPlatform.Application.Common.ResultWrapper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EventPlatform.WebApi.Common
 {
     public class ControllerApiBase : ControllerBase
     {
-        //[NonAction]
-        //public IActionResult ToActionResult(Result result)
-        //{
-        //    if (result.IsSuccess)
-        //    {
-        //        return result.SuccessInfo!.Code switch
-        //        {
-        //            SuccessCode.Ok => Ok(result.SuccessInfo.Message),
-        //            SuccessCode.Created => Created(),
-        //            SuccessCode.Accepted => Accepted(result.SuccessInfo.Message),
-        //            SuccessCode.NoContent => NoContent(),
-        //            _ => Ok()
-        //        };
-        //    }
+        [NonAction]
+        public IActionResult ToActionResult(Result result)
+        {
+            return result.Status switch
+            {
+                Status.Ok => Ok(),
+                Status.Forbiden => Forbid(),
+                Status.Created => Created(),
+                Status.NoContent => NoContent(),
+                Status.Error => Problem(result.Message),
+                Status.Conflict => Conflict(result.Message),
+                Status.Accepted => Accepted(result.Message),
+                Status.NotFound => NotFound(result.Message),
+                Status.BadRequest => BadRequest(result.Message),
+                _ => StatusCode(500, result.Message),
+            };
+        }
 
-        //    return result.ErrorInfo!.Code switch
-        //    {
-        //        ErrorCode.Conflict => Conflict(result.ErrorInfo.Message),
-        //        ErrorCode.Forbiden => Forbid(result.ErrorInfo.Message),
-        //        ErrorCode.NotFound => NotFound(result.ErrorInfo.Message),
-        //        ErrorCode.ServerError => Problem(result.ErrorInfo.Message),
-        //        ErrorCode.BadRequest => BadRequest(result.ErrorInfo.Message),
-        //        _ => StatusCode(500, result.ErrorInfo.Message)
-        //    };
-
-        //}
-
-        //[NonAction]
-        //public IActionResult ToActionResult<T>(Result<T> result)
-        //{
-        //    if (result.IsSuccess)
-        //    {
-        //        if (result.Value is null)
-        //        {
-        //            return NoContent();
-        //        }
-        //        return result.SuccessInfo!.Code switch
-        //        {
-        //            SuccessCode.Ok => Ok(result.Value),
-        //            SuccessCode.NoContent => NoContent(),
-        //            SuccessCode.Accepted => Accepted(result.SuccessInfo.Message),
-        //            SuccessCode.Created => Created(),
-        //            _ => Ok(result.Value)
-        //        };
-        //    }
-
-        //    return result.ErrorInfo!.Code switch
-        //    {
-        //        ErrorCode.NotFound => NotFound(result.ErrorInfo.Message),
-        //        ErrorCode.Conflict => Conflict(result.ErrorInfo.Message),
-        //        ErrorCode.ServerError => Problem(result.ErrorInfo.Message),
-        //        ErrorCode.Forbiden => Forbid(result.ErrorInfo.Message),
-        //        ErrorCode.BadRequest => BadRequest(result.ErrorInfo.Message),
-        //        _ => StatusCode(500, result.ErrorInfo.Message)
-        //    };
-        //}
+        [NonAction]
+        public IActionResult ToActionResult<T>(Result<T> result)
+        {
+            return result.Status switch
+            {
+                Status.Ok => Ok(result.Value),
+                Status.Created => Created(),
+                Status.Accepted => Accepted(),
+                Status.NoContent => NoContent(),
+                Status.Conflict => Conflict(),
+                Status.Forbiden => Forbid(),
+                Status.NotFound => NotFound(),
+                Status.Error => Problem(result.Message),
+                Status.BadRequest => BadRequest(result.Message),
+                _ => StatusCode(500, result.Message),
+            };
+        }
     }
 }

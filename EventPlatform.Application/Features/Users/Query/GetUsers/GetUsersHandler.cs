@@ -1,22 +1,16 @@
-﻿using EventPlatform.Application.Interfaces.Infrastructure;
+﻿using EventPlatform.Application.Features.Common;
+using EventPlatform.Application.Interfaces.Infrastructure;
+using EventPlatform.Application.Models.Domain.Users;
 using EventPlatform.Domain.Models;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace EventPlatform.Application.Features.Users.Query.GetUsers
 {
-    public class GetUsersHandler : IRequestHandler<GetUsersQuery, List<User>>
+    public class GetUsersHandler(IDatabaseContext context, IActions actions) : IRequestHandler<GetUsersQuery, ICollection<UserDto>>
     {
-        private readonly IDatabaseContext _context;
-
-        public GetUsersHandler(IDatabaseContext context)
+        public async Task<ICollection<UserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
-            _context = context;
-        }
-
-        public async Task<List<User>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
-        {
-            return await _context.Users.AsNoTracking().ToListAsync(cancellationToken);
+            return await actions.GetAll<User, UserDto>(context.Users, cancellationToken);
         }
     }
 }

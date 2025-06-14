@@ -1,4 +1,4 @@
-﻿namespace EventPlatform.Application.Models.Pagination
+﻿namespace EventPlatform.Application.Models.Application.Pagination
 {
     public class Pageable
     {
