@@ -29,7 +29,6 @@ services.AddCache(config);
 services.AddEmailSender(config);
 services.AddBackgroundScheduler(config);
 services.AddApplication(config);
-//services.AddApplication(config);
 //services.AddJwtProvider(config);
 services.AddPasswordHasher(config);
 
@@ -163,7 +162,7 @@ using (var scope = app.Services.CreateScope())
         var context = serviceProvider.GetRequiredService<PostgresDatabaseContext>();
         var cache = serviceProvider.GetRequiredService<ICache>();
         //await cache.RemoveAsync("user*", default);
-        await cache.RemoveKeysMask("user*");
+        await cache.RemoveKeysMask("*");
         DbInitializer.Initialize(context);
     }
     catch (Exception)
