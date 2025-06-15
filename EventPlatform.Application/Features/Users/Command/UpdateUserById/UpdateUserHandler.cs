@@ -11,15 +11,16 @@ namespace EventPlatform.Application.Features.Users.Command.UpdateUserById
     {
         public async Task<Result<UserDto>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            return await actions.Update<User, UserDto, Guid, UserUpdateDto>(context.Users, request.Id, request.User, cancellationToken,
-                (user) =>
+            return await actions.Update<User, UserDto>(request.Id, request.User, cancellationToken, (user) =>
+            {
+                var now = DateTime.UtcNow;
+                user.LastUpdatedAt = now;
+                if (request.User.Password != null)
                 {
-                    if (request.User.Password != null)
-                    {
-                        user.PasswordHash = hasher.Hash(request.User.Password);
-                        user.PasswordUpdatedAt = user.LastUpdatedAt;
-                    }
-                });
+                    user.PasswordHash = hasher.Hash(request.User.Password);
+                    user.PasswordUpdatedAt = now;
+                }
+            });
         }
     }
 }

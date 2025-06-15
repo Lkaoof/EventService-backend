@@ -11,8 +11,7 @@ namespace EventPlatform.Application.Features.Users.Query.GetUserById
     {
         public async Task<Result<UserDetailDto>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            //return await context.Users.GetById(request.Id, cancellationToken);
-            return await actions.GetById<User, UserDetailDto, Guid>(context.Users, request.Id, cancellationToken);
+            return await actions.GetById<User, UserDetailDto>(request.Id, cancellationToken);
         }
     }
 }

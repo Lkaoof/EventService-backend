@@ -42,7 +42,7 @@ namespace EventPlatform.Application.Common.ValidationBehavior
                     return (TResponse)(object)Result.Failure(string.Join(",\n", failures));
                 }
 
-                throw new ValidationException(failures);
+                //throw new ValidationException(failures);
             }
 
             return await next(cancellationToken);

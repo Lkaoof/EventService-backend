@@ -12,10 +12,7 @@ namespace EventPlatform.Application.Features.Users.Command.CreateUser
     {
         public async Task<Result<UserDto>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            return await actions.Create<User, UserDto, CreateUserCommand>(
-                context.Users,
-                request,
-                cancellationToken,
+            return await actions.Create<User, UserDto>(request, cancellationToken,
                 (user) => user.PasswordHash = passwordHasher.Hash(request.Password));
         }
     }

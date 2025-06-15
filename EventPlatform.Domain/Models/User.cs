@@ -14,11 +14,11 @@
 
         public DateTime Birthdate { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public DateTime LastUpdatedAt { get; set; } = DateTime.Now;
+        public DateTime LastUpdatedAt { get; set; } = DateTime.UtcNow;
 
-        public DateTime PasswordUpdatedAt { get; set; } = DateTime.Now;
+        public DateTime PasswordUpdatedAt { get; set; } = DateTime.UtcNow;
 
 
         // Relations

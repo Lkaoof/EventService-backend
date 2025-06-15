@@ -1,4 +1,5 @@
-﻿using EventPlatform.Application.Common.Mapping;
+﻿using EventPlatform.Application.Common.CacheBehavior;
+using EventPlatform.Application.Common.Mapping;
 using EventPlatform.Application.Common.ResultWrapper;
 using EventPlatform.Application.Models.Domain.Users;
 using EventPlatform.Domain.Models;
@@ -6,7 +7,7 @@ using MediatR;
 
 namespace EventPlatform.Application.Features.Users.Command.CreateUser
 {
-    public class CreateUserCommand : IRequest<Result<UserDto>>, IMapWith<User>
+    public class CreateUserCommand : IRequest<Result<UserDto>>, ICacheInvalidate, IMapWith<User>
     {
         public string Email { get; set; } = string.Empty;
 
@@ -18,5 +19,6 @@ namespace EventPlatform.Application.Features.Users.Command.CreateUser
 
         public DateTime Birthdate { get; set; }
 
+        public string[] CacheKeys => ["users*"];
     }
 }

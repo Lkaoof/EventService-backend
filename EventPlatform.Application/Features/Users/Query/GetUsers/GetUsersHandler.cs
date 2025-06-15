@@ -10,7 +10,7 @@ namespace EventPlatform.Application.Features.Users.Query.GetUsers
     {
         public async Task<ICollection<UserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
-            return await actions.GetAll<User, UserDto>(context.Users, cancellationToken);
+            return await actions.GetAll<User, UserDto>(cancellationToken);
         }
     }
 }

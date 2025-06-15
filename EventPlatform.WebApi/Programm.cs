@@ -7,12 +7,12 @@ using EventPlatform.Cache;
 using EventPlatform.Database;
 using EventPlatform.Email;
 using EventPlatform.PasswordHasher;
+using EventPlatform.RandomCodeGeneration;
 using GraphQL.Server.Ui.Altair;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using EventPlatform.RandomCodeGeneration;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -162,7 +162,8 @@ using (var scope = app.Services.CreateScope())
     {
         var context = serviceProvider.GetRequiredService<PostgresDatabaseContext>();
         var cache = serviceProvider.GetRequiredService<ICache>();
-        await cache.RemoveAsync("users*", default);
+        //await cache.RemoveAsync("user*", default);
+        await cache.RemoveKeysMask("user*");
         DbInitializer.Initialize(context);
     }
     catch (Exception)

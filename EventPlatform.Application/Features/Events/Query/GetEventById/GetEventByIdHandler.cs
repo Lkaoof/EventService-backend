@@ -11,7 +11,7 @@ namespace EventPlatform.Application.Features.Events.Query.GetEventById
     {
         public async Task<Result<EventDto>> Handle(GetEventByIdQuery request, CancellationToken cancellationToken)
         {
-            return await actions.GetById<Event, EventDto, Guid>(context.Events, request.Id, cancellationToken);
+            return await actions.GetById<Event, EventDto>(request.Id, cancellationToken);
         }
     }
 }

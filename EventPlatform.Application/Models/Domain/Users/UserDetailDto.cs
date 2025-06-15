@@ -1,7 +1,5 @@
 ﻿using EventPlatform.Application.Common.Mapping;
-using EventPlatform.Application.Models.Domain.Events;
 using EventPlatform.Application.Models.Domain.Roles;
-using EventPlatform.Application.Models.Domain.UserTickets;
 using EventPlatform.Domain.Models;
 
 namespace EventPlatform.Application.Models.Domain.Users

@@ -1,6 +1,7 @@
 ﻿using EventPlatform.Application.Common.ResultWrapper;
 using EventPlatform.Application.Features.Common;
 using EventPlatform.Application.Interfaces.Infrastructure;
+using EventPlatform.Domain.Models;
 using MediatR;
 
 namespace EventPlatform.Application.Features.Users.Command.DeleteUserById
@@ -9,7 +10,7 @@ namespace EventPlatform.Application.Features.Users.Command.DeleteUserById
     {
         public async Task<Result> Handle(DeleteUserByIdCommand request, CancellationToken cancellationToken)
         {
-            return await actions.DeleteById(context.Users, request.Id, cancellationToken);
+            return await actions.DeleteById<User>(request.Id, cancellationToken);
         }
     }
 }

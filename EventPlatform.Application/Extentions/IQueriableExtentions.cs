@@ -1,4 +1,5 @@
-﻿using EventPlatform.Application.Models.Application.Pagination;
+﻿using AutoMapper;
+using EventPlatform.Application.Models.Application.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventPlatform.Application.Extentions
@@ -16,6 +17,19 @@ namespace EventPlatform.Application.Extentions
             var items = await query.Skip(page.Index * page.Size).Take(page.Size).ToListAsync();
 
             return new Page<TEntity>(items, page.Index, total, items.Count);
+        }
+
+        public async static Task<Page<M>> PaginateAsync<T, M>(this IQueryable<T> query, Pageable page, IMapper mapper, CancellationToken ct = default)
+        {
+            if (page.Index < 0)
+                throw new ArgumentOutOfRangeException(nameof(page.Index), "Номер страницы должен быть >= 0");
+            if (page.Size <= 0)
+                throw new ArgumentOutOfRangeException(nameof(page.Size), "Размер страницы должен быть > 0");
+
+            var total = query.Count();
+            var items = await query.Skip(page.Index * page.Size).Take(page.Size).ToListAsync();
+
+            return new Page<M>(mapper.Map<IEnumerable<M>>(items), page.Index, total, items.Count);
         }
     }
 }

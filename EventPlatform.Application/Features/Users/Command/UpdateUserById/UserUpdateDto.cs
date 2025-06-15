@@ -14,9 +14,5 @@ namespace EventPlatform.Application.Features.Users.Command.UpdateUserById
         public string? Password { get; set; }
 
         public DateTime? Birthdate { get; set; }
-
-        public DateTime? PasswordUpdatedAt { get; set; }
-
-        public DateTime LastUpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

@@ -1,76 +1,64 @@
-﻿using EventPlatform.Application.Features.Users.Command.DeleteUserById;
+﻿using EventPlatform.Application.Features.Users.Command.CreateUser;
+using EventPlatform.Application.Features.Users.Command.DeleteUserById;
 using EventPlatform.Application.Features.Users.Command.UpdateUserById;
 using EventPlatform.Application.Features.Users.Query.GetUserById;
 using EventPlatform.Application.Features.Users.Query.GetUsers;
 using EventPlatform.Application.Features.Users.Query.GetUsersAsPage;
 using EventPlatform.Application.Interfaces.Infrastructure;
 using EventPlatform.Application.Models.Application.Pagination;
+using EventPlatform.RandomCodeGeneration;
 using EventPlatform.WebApi.Common;
 using MediatR;
-using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc;
-using EventPlatform.RandomCodeGeneration;
 
 namespace EventPlatform.WebApi.Controllers
 {
 
     [ApiController]
     [Route("/[controller]")]
-    public class UsersController : ControllerApiBase
+    public class UsersController(IMediator mediator, IEmailSender emailSender, IQuartzJobScheduler jobScheduler, IRandomCodeGeneration codeGenerator) : ControllerApiBase
     {
-        private readonly ICache _cache;
-        private readonly IMediator _mediator;
-        private readonly IDatabaseContext _db;
-        private readonly IEmailSender _emailSender;
-        private readonly IQuartzJobScheduler _jobScheduler;
-        private readonly IRandomCodeGeneration _codeGenerator;
-
-        public UsersController(ICache cache, IMediator mediator, IDatabaseContext db, IEmailSender emailSender, IQuartzJobScheduler jobScheduler, IRandomCodeGeneration codeGenerator)
-        {
-            _cache = cache;
-            _mediator = mediator;
-            _db = db;
-            _emailSender = emailSender;
-            _jobScheduler = jobScheduler;
-            _codeGenerator = codeGenerator;
-        }
-
-
         [HttpGet]
-        public async Task<IActionResult> GetUsers(CancellationToken ct)
+        public async Task<IActionResult> GetAll(CancellationToken ct)
         {
-            return Ok(await _mediator.Send(new GetUsersQuery()));
+            return Ok(await mediator.Send(new GetUsersQuery(), ct));
         }
 
         [HttpGet("page")]
-        public async Task<IActionResult> GetUsersAsPage([FromQuery] Pageable page, CancellationToken ct)
+        public async Task<IActionResult> GetAsPage([FromQuery] Pageable page, CancellationToken ct)
         {
-            return Ok(await _mediator.Send(new GetUsersAsPageQuery() { Page = page }));
+            return Ok(await mediator.Send(new GetUsersAsPageQuery() { Page = page }));
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser(Guid id, CancellationToken ct)
+        public async Task<IActionResult> Get(Guid id, CancellationToken ct)
         {
-            return ToActionResult(await _mediator.Send(new GetUserByIdQuery() { Id = id }, ct));
+            return ToActionResult(await mediator.Send(new GetUserByIdQuery() { Id = id }, ct));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id, CancellationToken ct)
         {
-            return ToActionResult(await _mediator.Send(new DeleteUserByIdCommand() { Id = id }, ct));
+            return ToActionResult(await mediator.Send(new DeleteUserByIdCommand() { Id = id }, ct));
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(Guid id, UserUpdateDto user, CancellationToken ct)
         {
-            return ToActionResult(await _mediator.Send(new UpdateUserCommand() { Id = id, User = user }, ct));
+            return ToActionResult(await mediator.Send(new UpdateUserCommand() { Id = id, User = user }, ct));
         }
 
         [HttpPost]
+        public async Task<IActionResult> Create(CreateUserCommand request, CancellationToken ct)
+        {
+            return ToActionResult(await mediator.Send(request, ct));
+        }
+
+        [HttpPost("send-mail")]
         public async Task<IActionResult> SendImail(string email, string subject, string content, CancellationToken ct)
         {
             //await _emailSender.SendAsync(email, subject, content, ct);
-            await _jobScheduler.ScheduleEmailSend(DateTimeOffset.Now.Add(TimeSpan.FromSeconds(10)), email, subject, content, ct);
+            await jobScheduler.ScheduleEmailSend(DateTimeOffset.Now.Add(TimeSpan.FromSeconds(10)), email, subject, content, ct);
             //await _jobScheduler.ScheduleAwait(DateTimeOffset.Now.Add(TimeSpan.FromSeconds(5)), Guid.NewGuid(), Guid.NewGuid());
             return Ok("Sended!");
         }
@@ -78,21 +66,22 @@ namespace EventPlatform.WebApi.Controllers
         [HttpGet("job")]
         public async Task<IActionResult> ScheduleJob(CancellationToken ct)
         {
-            return Ok();
+            return Ok("Nothing");
         }
+
         [HttpGet("SendConfirmationCode")]
         public async Task<IActionResult> SendConfirmationCode([FromQuery] string email, CancellationToken ct)
         {
             //Миша добавил простейшую валидацию чтобы с пустым полем не робило какую нашел в интернете если нужна другая и эта мазолит тебе глаза не меняй я сам разберусь и сделаю чето другое
             if (string.IsNullOrWhiteSpace(email))
                 return BadRequest("Email is required");
-           
-            string code = _codeGenerator.GenerateRandomCode(6, true,true);
-           
+
+            string code = codeGenerator.GenerateRandomCode(6, true, true);
+
             string subject = "Код подтверждения";
             string content = $"{code}";
-            
-            await _jobScheduler.ScheduleEmailSend(DateTimeOffset.Now.AddSeconds(6), email, subject, content, ct);
+
+            await jobScheduler.ScheduleEmailSend(DateTimeOffset.Now.AddSeconds(6), email, subject, content, ct);
 
             return Ok(code);
             //return Ok("Sended!");
