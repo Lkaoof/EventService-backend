@@ -1,6 +1,8 @@
 ﻿using EventPlatform.Application.Features.Users.Command.CreateUser;
 using EventPlatform.Application.Features.Users.Command.DeleteUserById;
+using EventPlatform.Application.Features.Users.Command.SendConfirmationCode;
 using EventPlatform.Application.Features.Users.Command.UpdateUserById;
+using EventPlatform.Application.Features.Users.Command.VerifyConfirmationCode;
 using EventPlatform.Application.Features.Users.Query.GetUserById;
 using EventPlatform.Application.Features.Users.Query.GetUsers;
 using EventPlatform.Application.Features.Users.Query.GetUsersAsPage;
@@ -8,6 +10,7 @@ using EventPlatform.Application.Interfaces.Infrastructure;
 using EventPlatform.Application.Models.Application.Pagination;
 using EventPlatform.RandomCodeGeneration;
 using EventPlatform.WebApi.Common;
+using EventPlatform.WebApi.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -69,23 +72,16 @@ namespace EventPlatform.WebApi.Controllers
             return Ok("Nothing");
         }
 
-        [HttpGet("SendConfirmationCode")]
+        [HttpPost("SendConfirmationCode")]
         public async Task<IActionResult> SendConfirmationCode([FromQuery] string email, CancellationToken ct)
         {
-            //Миша добавил простейшую валидацию чтобы с пустым полем не робило какую нашел в интернете если нужна другая и эта мазолит тебе глаза не меняй я сам разберусь и сделаю чето другое
-            if (string.IsNullOrWhiteSpace(email))
-                return BadRequest("Email is required");
+            return ToActionResult(await mediator.Send(new SendConfirmationCodeCommand() { Email = email, UserId = new Guid("9D2B0228-4D0D-4C23-8B49-01A698857709") }, ct));
+        }
 
-            string code = codeGenerator.GenerateRandomCode(6, true, true);
-
-            string subject = "Код подтверждения";
-            string content = $"{code}";
-
-            await jobScheduler.ScheduleEmailSend(DateTimeOffset.Now.AddSeconds(6), email, subject, content, ct);
-
-            return Ok(code);
-            //return Ok("Sended!");
-
+        [HttpGet("VerifyConfirmationCode")]
+        public async Task<IActionResult> VerifyConfirmationCode(string code, CancellationToken ct)
+        {
+            return ToActionResult(await mediator.Send(new VerifyConfirmationCodeCommand() {Code = code, UserId = new Guid("9D2B0228-4D0D-4C23-8B49-01A698857709") }, ct));
         }
     }
 }
