@@ -1,8 +1,10 @@
-﻿namespace EventPlatform.Domain.Models
+﻿using EventPlatform.Domain.Commnon;
+
+namespace EventPlatform.Domain.Models
 {
-    public class Notification
+    public class Notification : BaseEntity
     {
-        public Guid Id { get; set; }
+        //public Guid Id { get; set; }
 
         public string Subject { get; set; } = string.Empty;
 

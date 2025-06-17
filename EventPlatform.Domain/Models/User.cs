@@ -1,8 +1,10 @@
-﻿namespace EventPlatform.Domain.Models
+﻿using EventPlatform.Domain.Commnon;
+
+namespace EventPlatform.Domain.Models
 {
-    public class User
+    public class User : BaseEntity
     {
-        public Guid Id { get; set; }
+        //public Guid Id { get; set; }
 
         public string Email { get; set; } = string.Empty;
 

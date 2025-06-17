@@ -1,8 +1,10 @@
-﻿namespace EventPlatform.Domain.Models
+﻿using EventPlatform.Domain.Commnon;
+
+namespace EventPlatform.Domain.Models
 {
-    public class Ticket
+    public class Ticket : BaseEntity
     {
-        public Guid Id { get; set; }
+        //public Guid Id { get; set; }
 
         public string Title { get; set; } = string.Empty;
 

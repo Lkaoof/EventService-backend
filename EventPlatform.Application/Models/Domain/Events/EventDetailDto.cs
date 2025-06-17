@@ -17,16 +17,17 @@ namespace EventPlatform.Application.Models.Domain.Events
         public uint AvailableTickets { get; set; }
         public DateTime EndAt { get; set; }
         public DateTime StartAt { get; set; }
-        public string Title { get; set; } = string.Empty;
+        public string Title { get; set; }
         public string? ImageId { get; set; }
-        public string Description { get; set; } = string.Empty;
-        public string AdditionalRequirements { get; set; } = string.Empty;
+        public string Description { get; set; }
+        public string AdditionalRequirements { get; set; }
         public string ModerationStatus { get; set; } = null!;
 
         public UserDto Creator { get; set; } = null!;
         public EventTypeDto EventType { get; set; } = null!;
         public EventMoodDto EventMood { get; set; } = null!;
-        public IEnumerable<TagDto> Tags { get; set; } = [];
-        public IEnumerable<TicketDto> Tickets { get; set; } = [];
+        public ICollection<TagDto> Tags { get; set; } = [];
+        public ICollection<TicketDto> Tickets { get; set; } = [];
+
     }
 }

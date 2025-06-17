@@ -20,12 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\EventTypes\" />
-    <Folder Include="Features\EventMoods\" />
-    <Folder Include="Features\UserTickets\" />
-    <Folder Include="Features\Tickets\" />
-    <Folder Include="Features\Roles\" />
-    <Folder Include="Features\Notifications\" />
     <Folder Include="Interfaces\Application\" />
   </ItemGroup>
 

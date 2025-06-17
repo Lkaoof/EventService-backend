@@ -1,10 +1,11 @@
 ﻿using System.Text.Json.Serialization;
+using EventPlatform.Domain.Commnon;
 
 namespace EventPlatform.Domain.Models
 {
-    public class RefreshToken
+    public class RefreshToken : BaseEntity
     {
-        public Guid Id { get; set; }
+        //public Guid Id { get; set; }
 
         public string Token { get; set; } = null!;
 

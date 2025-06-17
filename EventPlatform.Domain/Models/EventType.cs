@@ -1,8 +1,10 @@
-﻿namespace EventPlatform.Domain.Models
+﻿using EventPlatform.Domain.Commnon;
+
+namespace EventPlatform.Domain.Models
 {
-    public class EventType
+    public class EventType : BaseEntity
     {
-        public Guid Id { get; set; }
+        //public Guid Id { get; set; }
 
         public string Title { get; set; } = string.Empty;
 

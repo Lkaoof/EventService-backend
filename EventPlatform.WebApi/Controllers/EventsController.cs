@@ -1,9 +1,9 @@
-﻿using EventPlatform.Application.Features.Events.Command.CreateEvent;
-using EventPlatform.Application.Features.Events.Command.DeleteEventById;
-using EventPlatform.Application.Features.Events.Command.UpdateEventById;
-using EventPlatform.Application.Features.Events.Query.GetEventAsPage;
-using EventPlatform.Application.Features.Events.Query.GetEventById;
-using EventPlatform.Application.Features.Events.Query.GetEvents;
+﻿using EventPlatform.Application.Features.Events.Command.Create;
+using EventPlatform.Application.Features.Events.Command.DeleteById;
+using EventPlatform.Application.Features.Events.Command.UpdateById;
+using EventPlatform.Application.Features.Events.Query.Get;
+using EventPlatform.Application.Features.Events.Query.GetAsPage;
+using EventPlatform.Application.Features.Events.Query.GetById;
 using EventPlatform.Application.Models.Application.Pagination;
 using EventPlatform.WebApi.Common;
 using MediatR;
@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventPlatform.WebApi.Controllers
 {
     [ApiController]
-    [Route("/[controller]")]
+    [Route("/api/[controller]")]
     public class EventsController(IMediator mediator) : ControllerApiBase
     {
         [HttpGet]

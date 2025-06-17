@@ -1,8 +1,10 @@
-﻿namespace EventPlatform.Domain.Models
+﻿using EventPlatform.Domain.Commnon;
+
+namespace EventPlatform.Domain.Models
 {
-    public class Event
+    public class Event : BaseEntity
     {
-        public Guid Id { get; set; }
+        //public Guid Id { get; set; }
 
         public double Latitude { get; set; }
 

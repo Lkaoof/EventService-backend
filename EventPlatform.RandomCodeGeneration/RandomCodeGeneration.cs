@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using EventPlatform.Application.Interfaces.Infrastructure;
 
 namespace EventPlatform.RandomCodeGeneration
 {

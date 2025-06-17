@@ -1,10 +1,13 @@
-﻿namespace EventPlatform.Application.Models.Domain.UserTickets
+﻿using EventPlatform.Application.Common.Mapping;
+using EventPlatform.Domain.Models;
+
+namespace EventPlatform.Application.Models.Domain.UserTickets
 {
-    public class UserTicketDto
+    public class UserTicketDto : IMapWith<UserTicket>
     {
         public Guid Id { get; set; }
         public string TicketTitle { get; set; } = null!;
-        public string Status { get; set; } = null!;
+        public string TicketStatus { get; set; } = null!;
         public decimal Price { get; set; }
     }
 }

@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EventPlatform.Application.Common.ResultWrapper;
-using EventPlatform.Application.Features.Users.Command.SendConfirmationCode;
+﻿using EventPlatform.Application.Common.ResultWrapper;
 using EventPlatform.Application.Interfaces.Infrastructure;
-using EventPlatform.RandomCodeGeneration;
 using MediatR;
 
 namespace EventPlatform.Application.Features.Users.Command.VerifyConfirmationCode

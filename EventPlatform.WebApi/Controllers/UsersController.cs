@@ -1,16 +1,14 @@
-﻿using EventPlatform.Application.Features.Users.Command.CreateUser;
-using EventPlatform.Application.Features.Users.Command.DeleteUserById;
+﻿using EventPlatform.Application.Features.Users.Command.Create;
+using EventPlatform.Application.Features.Users.Command.DeleteById;
 using EventPlatform.Application.Features.Users.Command.SendConfirmationCode;
-using EventPlatform.Application.Features.Users.Command.UpdateUserById;
+using EventPlatform.Application.Features.Users.Command.UpdateById;
 using EventPlatform.Application.Features.Users.Command.VerifyConfirmationCode;
-using EventPlatform.Application.Features.Users.Query.GetUserById;
-using EventPlatform.Application.Features.Users.Query.GetUsers;
-using EventPlatform.Application.Features.Users.Query.GetUsersAsPage;
+using EventPlatform.Application.Features.Users.Query.Get;
+using EventPlatform.Application.Features.Users.Query.GetAsPage;
+using EventPlatform.Application.Features.Users.Query.GetById;
 using EventPlatform.Application.Interfaces.Infrastructure;
 using EventPlatform.Application.Models.Application.Pagination;
-using EventPlatform.RandomCodeGeneration;
 using EventPlatform.WebApi.Common;
-using EventPlatform.WebApi.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +16,7 @@ namespace EventPlatform.WebApi.Controllers
 {
 
     [ApiController]
-    [Route("/[controller]")]
+    [Route("/api/[controller]")]
     public class UsersController(IMediator mediator, IEmailSender emailSender, IQuartzJobScheduler jobScheduler, IRandomCodeGeneration codeGenerator) : ControllerApiBase
     {
         [HttpGet]
@@ -81,7 +79,7 @@ namespace EventPlatform.WebApi.Controllers
         [HttpGet("VerifyConfirmationCode")]
         public async Task<IActionResult> VerifyConfirmationCode(string code, CancellationToken ct)
         {
-            return ToActionResult(await mediator.Send(new VerifyConfirmationCodeCommand() {Code = code, UserId = new Guid("9D2B0228-4D0D-4C23-8B49-01A698857709") }, ct));
+            return ToActionResult(await mediator.Send(new VerifyConfirmationCodeCommand() { Code = code, UserId = new Guid("9D2B0228-4D0D-4C23-8B49-01A698857709") }, ct));
         }
     }
 }

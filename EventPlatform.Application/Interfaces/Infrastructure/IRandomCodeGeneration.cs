@@ -1,4 +1,4 @@
-﻿namespace EventPlatform.RandomCodeGeneration
+﻿namespace EventPlatform.Application.Interfaces.Infrastructure
 {
     public interface IRandomCodeGeneration
     {

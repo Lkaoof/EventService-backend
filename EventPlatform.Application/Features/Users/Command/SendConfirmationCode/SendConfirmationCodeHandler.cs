@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using EventPlatform.Application.Common.ResultWrapper;
-using EventPlatform.Application.Features.Common;
-using EventPlatform.Application.Features.Users.Command.DeleteUserById;
+﻿using EventPlatform.Application.Common.ResultWrapper;
 using EventPlatform.Application.Interfaces.Infrastructure;
-using EventPlatform.RandomCodeGeneration;
 using MediatR;
 
 namespace EventPlatform.Application.Features.Users.Command.SendConfirmationCode
@@ -26,7 +17,7 @@ namespace EventPlatform.Application.Features.Users.Command.SendConfirmationCode
 
             string subject = "Код подтверждения";
             string content = $"{code}";
-           
+
             await emailSender.SendAsync(request.Email, subject, content, cancellationToken);
 
             return Result.Success();

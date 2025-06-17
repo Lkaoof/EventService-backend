@@ -6,7 +6,7 @@ namespace EventPlatform.Application.Models.Domain.Users
     public class UserDto : IMapWith<User>
     {
         public Guid Id { get; set; }
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; }
         public string? Email { get; set; }
     }
 }

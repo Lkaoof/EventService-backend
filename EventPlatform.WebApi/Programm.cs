@@ -6,8 +6,9 @@ using EventPlatform.BackgroundScheduller;
 using EventPlatform.Cache;
 using EventPlatform.Database;
 using EventPlatform.Email;
-using EventPlatform.PasswordHasher;
+using EventPlatform.PasswordHash;
 using EventPlatform.RandomCodeGeneration;
+using EventPlatform.WebApi.Initializers;
 using GraphQL.Server.Ui.Altair;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
@@ -126,6 +127,7 @@ services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseStaticFiles();
 app.UseRouting();
 app.UseCors("AllowSpecificOrigins");
 app.UseHttpsRedirection();
@@ -177,6 +179,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
+        c.InjectStylesheet("/swagger-ui/SwaggerDark.css");
         c.DisplayRequestDuration();
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
         c.RoutePrefix = string.Empty;

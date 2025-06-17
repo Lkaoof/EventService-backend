@@ -2,7 +2,7 @@
 using EventPlatform.Application.Interfaces.Infrastructure;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
-namespace EventPlatform.PasswordHasher
+namespace EventPlatform.PasswordHash
 {
     public class PasswordHasher : IPasswordHasher
     {

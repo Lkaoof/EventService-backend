@@ -4,6 +4,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using EventPlatform.Application.Common.ResultWrapper;
 using EventPlatform.Application.Interfaces.Infrastructure;
+using EventPlatform.Domain.Commnon;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventPlatform.Application.Features.Common
@@ -12,7 +13,7 @@ namespace EventPlatform.Application.Features.Common
     {
         private static readonly ConcurrentDictionary<Type, PropertyInfo?> DbSets = new();
 
-        private DbSet<T> GetDbSet<T>() where T : class
+        private DbSet<T> GetDbSet<T>() where T : BaseEntity
         {
             Type entityType = typeof(T);
             var propertyInfo = DbSets.GetOrAdd(
@@ -24,37 +25,38 @@ namespace EventPlatform.Application.Features.Common
             return (DbSet<T>)propertyInfo.GetValue(context);
         }
 
-        public async Task<Result<M>> Create<E, M>(object request, CancellationToken ct = default, Action<E>? entityAction = null) where E : class
+        public async Task<Result<M>> Create<E, M>(object request, CancellationToken ct = default, Func<E, IDatabaseContext, Task>? entityAction = null) where E : BaseEntity
         {
             var set = GetDbSet<E>();
             var entity = mapper.Map<E>(request);
-            entityAction?.Invoke(entity);
+            entityAction?.Invoke(entity, context).WaitAsync(ct);
             set!.Add(entity);
             var result = await context.SaveChangesAsync(ct);
             return result == 0 ? Result.Failure<M>() : Result.Success(mapper.Map<M>(entity));
         }
 
-        public async Task<Result<M>> GetById<T, M>(object Id, CancellationToken ct = default, Action<T>? entityAction = default) where T : class
+        public async Task<Result<M>> GetById<T, M>(Guid id, CancellationToken ct = default, Action<T>? entityAction = default) where T : BaseEntity
         {
             var set = GetDbSet<T>();
-            var entity = await set.FindAsync(Id, ct);
+            var entity = await set.Where(q => q.Id == id)
+                .ProjectTo<M>(mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(ct);
+
             if (entity == null)
             {
                 return Result.Failure<M>(status: Status.NotFound);
             }
 
-            entityAction?.Invoke(entity);
-
-            return Result.Success(mapper.Map<M>(entity));
+            return Result.Success(entity);
         }
 
-        public async Task<ICollection<M>> GetAll<E, M>(CancellationToken ct = default) where E : class
+        public async Task<ICollection<M>> GetAll<E, M>(CancellationToken ct = default) where E : BaseEntity
         {
             var set = GetDbSet<E>();
             return await set.AsNoTracking().ProjectTo<M>(mapper.ConfigurationProvider).ToListAsync(ct);
         }
 
-        public async Task<Result> DeleteById<E>(object Id, CancellationToken ct = default, Action<E>? entityAction = default) where E : class
+        public async Task<Result> DeleteById<E>(Guid Id, CancellationToken ct = default, Action<E>? entityAction = default) where E : BaseEntity
         {
             var set = GetDbSet<E>();
             var entity = await set.FindAsync(Id, ct);
@@ -65,7 +67,7 @@ namespace EventPlatform.Application.Features.Common
             return Result.Success(status: Status.NoContent);
         }
 
-        public async Task<Result<M>> Update<E, M>(object id, object request, CancellationToken ct = default, Action<E>? entityAction = default) where E : class
+        public async Task<Result<M>> Update<E, M>(Guid id, object request, CancellationToken ct = default, Action<E>? entityAction = default) where E : BaseEntity
         {
             var set = GetDbSet<E>();
             var entity = await set.FindAsync(id, ct);

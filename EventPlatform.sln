@@ -32,7 +32,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPlatform.BackgroundSch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPlatform.RandomCodeGeneration", "EventPlatform.RandomCodeGeneration\EventPlatform.RandomCodeGeneration.csproj", "{D09D1F18-65E1-4ADE-814A-A255E4BEFDD8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPlatform.PasswordHasher", "EventPlatform.PasswordHasher\EventPlatform.PasswordHasher.csproj", "{9DCC7288-F700-4CF3-A9A9-AC82656F3A59}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPlatform.PasswordHash", "EventPlatform.PasswordHasher\EventPlatform.PasswordHash.csproj", "{9DCC7288-F700-4CF3-A9A9-AC82656F3A59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

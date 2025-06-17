@@ -1,10 +1,12 @@
-﻿namespace EventPlatform.Domain.Models
-{
-    public class UserTicket
-    {
-        public Guid Id { get; set; }
+﻿using EventPlatform.Domain.Commnon;
 
-        public UserTicketStatus TicketStatus { get; set; }
+namespace EventPlatform.Domain.Models
+{
+    public class UserTicket : BaseEntity
+    {
+        //public Guid Id { get; set; }
+
+        public UserTicketStatus TicketStatus { get; set; } = UserTicketStatus.Active;
 
         public decimal Price { get; set; }
 

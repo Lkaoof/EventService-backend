@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EventPlatform.PasswordHasher
+namespace EventPlatform.PasswordHash
 {
     public static class DependencyInjection
     {
