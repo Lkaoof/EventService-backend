@@ -2,6 +2,8 @@
 using EventPlatform.Application.Common.CacheBehavior;
 using EventPlatform.Application.Common.ValidationBehavior;
 using EventPlatform.Application.Features.Common;
+using EventPlatform.Application.Interfaces.Application;
+using EventPlatform.Application.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -17,13 +19,15 @@ namespace EventPlatform.Application
 
             services.AddAutoMapper(typeof(DependencyInjection).Assembly);
 
-            services.AddTransient<IActions, Actions>();
+            services.AddScoped<IActions, Actions>();
 
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CacheBehavior<,>));
+            services.AddScoped<ITokenService, TokenService>();
 
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CacheInvalidateBehavior<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(CacheBehavior<,>));
 
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(CacheInvalidateBehavior<,>));
+
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
 
             services.AddValidatorsFromAssemblies([Assembly.GetExecutingAssembly()]);
 

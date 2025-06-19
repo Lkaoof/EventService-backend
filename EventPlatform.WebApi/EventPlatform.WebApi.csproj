@@ -36,7 +36,7 @@
 		<ProjectReference Include="..\EventPlatform.Database\EventPlatform.Database.csproj" />
 		<ProjectReference Include="..\EventPlatform.EmailProvider\EventPlatform.Email.csproj" />
 		<ProjectReference Include="..\EventPlatform.JwtProvider\EventPlatform.Jwt.csproj" />
-		<ProjectReference Include="..\EventPlatform.NotificationProvider\EventPlatform.Notification.csproj" />
+		<ProjectReference Include="..\EventPlatform.NotificationProvider\EventPlatform.Notifications.csproj" />
 		<ProjectReference Include="..\EventPlatform.PasswordHasher\EventPlatform.PasswordHash.csproj" />
 		<ProjectReference Include="..\EventPlatform.Payments\EventPlatform.Payments.csproj" />
 		<ProjectReference Include="..\EventPlatform.RandomCodeGeneration\EventPlatform.RandomCodeGeneration.csproj" />

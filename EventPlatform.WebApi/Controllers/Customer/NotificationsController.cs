@@ -7,14 +7,18 @@ using EventPlatform.Application.Features.Notifications.Query.GetById;
 using EventPlatform.Application.Models.Application.Pagination;
 using EventPlatform.WebApi.Common;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EventPlatform.WebApi.Controllers
+namespace EventPlatform.WebApi.Controllers.Customer
 {
+    [Authorize]
     [ApiController]
-    [Route("/api/[controller]")]
+    [Route("/api/notifications")]
     public class NotificationsController(IMediator mediator) : ControllerApiBase
     {
+       // TODO : Персональные уведомления.
+        
         [HttpGet]
         public async Task<IActionResult> GetAll(CancellationToken ct)
         {
@@ -33,24 +37,22 @@ namespace EventPlatform.WebApi.Controllers
             return Ok(await mediator.Send(new GetNotificationsAsPageQuery() { Page = page }));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateNotificationCommand request, CancellationToken ct)
-        {
-            return ToActionResult(await mediator.Send(request, ct));
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> Create(CreateNotificationCommand request, CancellationToken ct)
+        //{
+        //    return ToActionResult(await mediator.Send(request, ct));
+        //}
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, NotificationUpdateDto dto, CancellationToken ct)
-        {
-            return ToActionResult(await mediator.Send(new UpdateNotificationByIdCommand() { Id = id, Entity = dto }, ct));
-        }
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> Update(Guid id, NotificationUpdateDto dto, CancellationToken ct)
+        //{
+        //    return ToActionResult(await mediator.Send(new UpdateNotificationByIdCommand() { Id = id, Entity = dto }, ct));
+        //}
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
-        {
-            return ToActionResult(await mediator.Send(new DeleteNotificationByIdCommand() { Id = id }, ct));
-        }
-
-
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
+        //{
+        //    return ToActionResult(await mediator.Send(new DeleteNotificationByIdCommand() { Id = id }, ct));
+        //}
     }
 }

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using EventPlatform.Application.Common.ResultWrapper;
-using EventPlatform.Application.Features.Common;
+using EventPlatform.Application.Interfaces.Application;
 using EventPlatform.Application.Models.Domain.Events;
 using EventPlatform.Domain.Models;
 using MediatR;

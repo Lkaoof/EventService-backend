@@ -7,19 +7,21 @@ using EventPlatform.Application.Features.Tickets.Query.GetById;
 using EventPlatform.Application.Models.Application.Pagination;
 using EventPlatform.WebApi.Common;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EventPlatform.WebApi.Controllers
+namespace EventPlatform.WebApi.Controllers.Customer
 {
+    [Authorize(Roles = "Organizer, Admin, Moderator")]
     [ApiController]
-    [Route("/api/[controller]")]
+    [Route("/api/tickets")]
     public class TicketsController(IMediator mediator) : ControllerApiBase
     {
-        [HttpGet]
-        public async Task<IActionResult> GetAll(CancellationToken ct)
-        {
-            return Ok(await mediator.Send(new GetTicketsQuery(), ct));
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> GetAll(CancellationToken ct)
+        //{
+        //    return Ok(await mediator.Send(new GetTicketsQuery(), ct));
+        //}
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id, CancellationToken ct)

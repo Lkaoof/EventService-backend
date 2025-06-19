@@ -8,8 +8,8 @@ namespace EventPlatform.Application.Features.Users.Command.VerifyConfirmationCod
     {
         public async Task<Result> Handle(VerifyConfirmationCodeCommand request, CancellationToken cancellationToken)
         {
-            var storedCode = await cache.StringGetAsync($"user_code:{request.UserId}", cancellationToken);
-            return storedCode == request.Code ? Result.Success() : Result.Failure(status: Status.NotFound);
+            var storedCode = await cache.StringGetAsync($"user_code:{request.Email}", cancellationToken);
+            return storedCode == request.Code ? Result.Success() : Result.Failure("Code not found",Status.NotFound);
         }
     }
 }

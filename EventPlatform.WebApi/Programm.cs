@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.Json.Serialization;
 using EntityGraphQL.AspNet;
 using EventPlatform.Application;
 using EventPlatform.Application.Interfaces.Infrastructure;
@@ -6,6 +7,7 @@ using EventPlatform.BackgroundScheduller;
 using EventPlatform.Cache;
 using EventPlatform.Database;
 using EventPlatform.Email;
+using EventPlatform.Jwt;
 using EventPlatform.PasswordHash;
 using EventPlatform.RandomCodeGeneration;
 using EventPlatform.WebApi.Initializers;
@@ -14,6 +16,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +24,12 @@ var services = builder.Services;
 var config = builder.Configuration;
 
 services.AddCodeGeneration(config);
-services.AddControllers();
+services.AddControllers()
+.AddJsonOptions(opt =>
+{
+    opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
 services.AddOpenApi();
 services.AddEndpointsApiExplorer();
 services.AddGraphQLSchema<PostgresDatabaseContext>();
@@ -30,7 +38,7 @@ services.AddCache(config);
 services.AddEmailSender(config);
 services.AddBackgroundScheduler(config);
 services.AddApplication(config);
-//services.AddJwtProvider(config);
+services.AddJwtProvider(config);
 services.AddPasswordHasher(config);
 
 var JwtOptions = config.GetSection("JwtOptions");
@@ -163,7 +171,6 @@ using (var scope = app.Services.CreateScope())
     {
         var context = serviceProvider.GetRequiredService<PostgresDatabaseContext>();
         var cache = serviceProvider.GetRequiredService<ICache>();
-        //await cache.RemoveAsync("user*", default);
         await cache.RemoveKeysMask("*");
         DbInitializer.Initialize(context);
     }
@@ -180,9 +187,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.InjectStylesheet("/swagger-ui/SwaggerDark.css");
+        c.InjectJavascript("/swagger-ui/SwaggerScript.js");
         c.DisplayRequestDuration();
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
         c.RoutePrefix = string.Empty;
+        c.DocExpansion(DocExpansion.None);
     });
     app.MapOpenApi();
 }

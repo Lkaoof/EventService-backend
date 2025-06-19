@@ -7,12 +7,15 @@ using EventPlatform.Application.Features.Tags.Query.GetById;
 using EventPlatform.Application.Models.Application.Pagination;
 using EventPlatform.WebApi.Common;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EventPlatform.WebApi.Controllers
+namespace EventPlatform.WebApi.Controllers.Customer
 {
+    [Tags("Events")]
+    [Authorize]
     [ApiController]
-    [Route("/api/[controller]")]
+    [Route("/api/tags")]
     public class TagsController(IMediator mediator) : ControllerApiBase
     {
         [HttpGet]
@@ -39,16 +42,16 @@ namespace EventPlatform.WebApi.Controllers
             return ToActionResult(await mediator.Send(request, ct));
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, TagUpdateDto dto, CancellationToken ct)
-        {
-            return ToActionResult(await mediator.Send(new UpdateTagByIdCommand() { Id = id, Entity = dto }, ct));
-        }
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> Update(Guid id, TagUpdateDto dto, CancellationToken ct)
+        //{
+        //    return ToActionResult(await mediator.Send(new UpdateTagByIdCommand() { Id = id, Entity = dto }, ct));
+        //}
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
-        {
-            return ToActionResult(await mediator.Send(new DeleteTagByIdCommand() { Id = id }, ct));
-        }
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
+        //{
+        //    return ToActionResult(await mediator.Send(new DeleteTagByIdCommand() { Id = id }, ct));
+        //}
     }
 }

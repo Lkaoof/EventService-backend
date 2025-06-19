@@ -19,6 +19,10 @@ namespace EventPlatform.Database.ModelsConfiguration
                 .HasMaxLength(200)
                 .IsRequired();
 
+            //builder.Property(e => e.Address)
+            //    .HasColumnName("address")
+            //    .HasMaxLength(500);
+
             builder.Property(e => e.ImageId)
                 .HasColumnName("image_id")
                 .HasMaxLength(100);
@@ -58,7 +62,7 @@ namespace EventPlatform.Database.ModelsConfiguration
                 .HasColumnName("returned_tickets")
                 .HasColumnType("bigint");
 
-            builder.Property(e => e.ModerationStatus)
+            builder.Property(e => e.Status)
                 .HasColumnName("moderation_status")
                 .HasConversion<string>()
                 .HasMaxLength(20)

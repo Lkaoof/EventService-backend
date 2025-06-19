@@ -7,12 +7,15 @@ using EventPlatform.Application.Features.Roles.Query.GetById;
 using EventPlatform.Application.Models.Application.Pagination;
 using EventPlatform.WebApi.Common;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EventPlatform.WebApi.Controllers
+namespace EventPlatform.WebApi.Controllers.Basic
 {
+    [Tags("Admin")]
+    [Authorize(Roles ="Admin")]
     [ApiController]
-    [Route("/api/[controller]")]
+    [Route("/api/roles")]
     public class RolesController(IMediator mediator) : ControllerApiBase
     {
         [HttpGet]

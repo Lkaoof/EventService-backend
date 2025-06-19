@@ -1,4 +1,4 @@
-﻿using EventPlatform.Application.Features.Common;
+﻿using EventPlatform.Application.Interfaces.Application;
 using EventPlatform.Application.Models.Domain.Notifications;
 using EventPlatform.Domain.Models;
 using MediatR;

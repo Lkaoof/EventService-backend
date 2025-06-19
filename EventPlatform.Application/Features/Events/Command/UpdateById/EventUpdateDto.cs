@@ -1,6 +1,9 @@
-﻿namespace EventPlatform.Application.Features.Events.Command.UpdateById
+﻿using EventPlatform.Application.Common.Mapping;
+using EventPlatform.Domain.Models;
+
+namespace EventPlatform.Application.Features.Events.Command.UpdateById
 {
-    public class EventUpdateDto
+    public class EventUpdateDto : IMapWith<Event>
     {
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }

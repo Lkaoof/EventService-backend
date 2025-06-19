@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\Application\" />
+    <Folder Include="Features\Auth\Command\" />
   </ItemGroup>
 
 </Project>

@@ -5,6 +5,7 @@ namespace EventPlatform.BackgroundScheduller.Jobs
     public class AwaitSendEmail : IJob
     {
         public static readonly JobKey Key = new JobKey("await-send-email", "email");
+
         public async Task Execute(IJobExecutionContext context)
         {
             var eventId = context.MergedJobDataMap.GetString("eventId");

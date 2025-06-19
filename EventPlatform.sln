@@ -24,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPlatform.Jwt", "EventP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPlatform.Email", "EventPlatform.EmailProvider\EventPlatform.Email.csproj", "{F729C511-1E63-47B0-A1D4-6BB1F71E2C44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPlatform.Notification", "EventPlatform.NotificationProvider\EventPlatform.Notification.csproj", "{721FA464-8539-40B6-B266-625E60410AAF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPlatform.Notifications", "EventPlatform.NotificationProvider\EventPlatform.Notifications.csproj", "{721FA464-8539-40B6-B266-625E60410AAF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPlatform.Payments", "EventPlatform.Payments\EventPlatform.Payments.csproj", "{D275F0EC-34FA-45B8-AA58-BE04619D8F1C}"
 EndProject

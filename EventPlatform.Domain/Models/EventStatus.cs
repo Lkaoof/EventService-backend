@@ -1,10 +1,11 @@
 ﻿namespace EventPlatform.Domain.Models
 {
     [Flags]
-    public enum EventModerationStatus
+    public enum EventStatus
     {
         Rejected,
         Approved,
         UnderModeration,
+        Finished
     }
 }

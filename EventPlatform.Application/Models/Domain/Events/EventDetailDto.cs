@@ -21,7 +21,7 @@ namespace EventPlatform.Application.Models.Domain.Events
         public string? ImageId { get; set; }
         public string Description { get; set; }
         public string AdditionalRequirements { get; set; }
-        public string ModerationStatus { get; set; } = null!;
+        public string Status { get; set; } = null!;
 
         public UserDto Creator { get; set; } = null!;
         public EventTypeDto EventType { get; set; } = null!;

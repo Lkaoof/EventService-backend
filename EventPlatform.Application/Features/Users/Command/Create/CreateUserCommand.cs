@@ -19,6 +19,8 @@ namespace EventPlatform.Application.Features.Users.Command.Create
 
         public DateTime Birthdate { get; set; }
 
+        public string ConfirmationCode { get; set; } = string.Empty;
+
         public string[] CacheKeys => ["users*"];
     }
 }

@@ -13,7 +13,7 @@ namespace EventPlatform.Application.Features.Users.Command.SendConfirmationCode
 
             string code = randomCode.GenerateRandomCode(6, true, true);
 
-            await cache.StringSetAsync($"user_code:{request.UserId}", code, cancellationToken, TimeSpan.FromMinutes(1));
+            await cache.StringSetAsync($"user_code:{request.Email}", code, cancellationToken, TimeSpan.FromMinutes(5));
 
             string subject = "Код подтверждения";
             string content = $"{code}";

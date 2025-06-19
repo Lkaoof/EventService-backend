@@ -11,6 +11,6 @@ namespace EventPlatform.Application.Features.Users.Command.UpdateById
 
         public UserUpdateDto User { get; set; }
 
-        public string[] CacheKeys => [$"users:{Id}", "users*"];
+        public string[] CacheKeys => [$"user:{Id}", "users*"];
     }
 }

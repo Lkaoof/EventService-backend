@@ -6,6 +6,7 @@ namespace EventPlatform.Domain.Models
     {
         //public Guid Id { get; set; }
 
+
         public double Latitude { get; set; }
 
         public double Longitude { get; set; }
@@ -20,13 +21,15 @@ namespace EventPlatform.Domain.Models
 
         public string Title { get; set; } = string.Empty;
 
+        //public string City { get; set; } = string.Empty;
+
         public string? ImageId { get; set; } = string.Empty;
 
         public string Description { get; set; } = string.Empty;
 
         public string AdditionalRequirements { get; set; } = string.Empty;
 
-        public EventModerationStatus ModerationStatus { get; set; } = EventModerationStatus.UnderModeration;
+        public EventStatus Status { get; set; } = EventStatus.UnderModeration;
 
 
         // Relations

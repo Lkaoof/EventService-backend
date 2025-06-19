@@ -3,7 +3,7 @@ using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
 
-namespace EventPlatform.EmailProvider
+namespace EventPlatform.Email
 {
     public class EmailSender(IConfiguration config) : IEmailSender
     {
@@ -36,7 +36,7 @@ namespace EventPlatform.EmailProvider
             await client.DisconnectAsync(true);
         }
 
-        public async Task SencAsync(IEnumerable<string> emails, string subject, string content, CancellationToken ct)
+        public async Task SenAsync(IEnumerable<string> emails, string subject, string content, CancellationToken ct)
         {
             foreach (var email in emails)
             {

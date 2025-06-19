@@ -15,7 +15,6 @@ namespace EventPlatform.Application.Extentions
 
             var total = query.Count();
             var items = await query.Skip(page.Index * page.Size).Take(page.Size).ToListAsync();
-
             return new Page<TEntity>(items, page.Index, total, items.Count);
         }
 

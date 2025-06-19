@@ -6,6 +6,6 @@ namespace EventPlatform.Application.Features.Users.Command.VerifyConfirmationCod
     public class VerifyConfirmationCodeCommand : IRequest<Result>
     {
         public string Code { get; set; }
-        public Guid UserId { get; set; }
+        public string Email { get; set; }
     }
 }

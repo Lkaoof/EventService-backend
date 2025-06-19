@@ -15,5 +15,6 @@ namespace EventPlatform.Application.Models.Domain.Events
         public EventTypeDto EventType { get; set; } = null!;
         public EventMoodDto EventMood { get; set; } = null!;
         public UserDto Creator { get; set; } = null!;
+        public string Status { get; set; } = null!;
     }
 }

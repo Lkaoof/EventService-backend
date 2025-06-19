@@ -5,8 +5,6 @@ namespace EventPlatform.Application.Features.Users.Command.UpdateById
 {
     public class UserUpdateDto : IMapWith<User>
     {
-        public string? Email { get; set; }
-
         public string? Name { get; set; }
 
         public string? PhoneNumber { get; set; }

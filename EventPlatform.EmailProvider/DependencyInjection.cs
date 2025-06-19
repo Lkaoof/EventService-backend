@@ -1,5 +1,4 @@
 ﻿using EventPlatform.Application.Interfaces.Infrastructure;
-using EventPlatform.EmailProvider;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
