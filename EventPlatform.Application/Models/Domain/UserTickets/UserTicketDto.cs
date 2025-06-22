@@ -8,6 +8,5 @@ namespace EventPlatform.Application.Models.Domain.UserTickets
         public Guid Id { get; set; }
         public string TicketTitle { get; set; } = null!;
         public string TicketStatus { get; set; } = null!;
-        public decimal Price { get; set; }
     }
 }

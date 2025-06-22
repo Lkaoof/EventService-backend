@@ -31,6 +31,8 @@ namespace EventPlatform.Database
 
         public DbSet<UserTicket> UsersTickets { get; set; }
 
+        public DbSet<Purchase> Purchases { get; set; }
+
         protected override void OnModelCreating(ModelBuilder models)
         {
             models.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

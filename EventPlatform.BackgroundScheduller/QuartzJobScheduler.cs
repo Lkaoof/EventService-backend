@@ -1,12 +1,13 @@
 ﻿using EventPlatform.Application.Interfaces.Infrastructure;
 using EventPlatform.BackgroundScheduller.Jobs;
 using EventPlatform.BackgroundScheduller.Jobs.Events;
+using EventPlatform.Domain.Models;
 using Microsoft.Extensions.Logging;
 using Quartz;
 
 namespace EventPlatform.BackgroundScheduller
 {
-    public class QuartzJobScheduler(ISchedulerFactory schedulerFactory, ILogger<QuartzJobScheduler> logger) : IQuartzJobScheduler
+    public class QuartzJobScheduler(ISchedulerFactory schedulerFactory, ILogger<QuartzJobScheduler> logger) : IJobScheduler
     {
         private readonly ISchedulerFactory _schedulerFactory = schedulerFactory;
         //private readonly ILogger<QuartzJobScheduler> _logger = logger;
@@ -40,7 +41,7 @@ namespace EventPlatform.BackgroundScheduller
             var jobDetail = JobBuilder.Create<SendEventEmailReminder>()
               .WithIdentity($"email-reminder:{email}:event:{eventId}")
               .UsingJobData("email", email)
-              .UsingJobData("eventId", eventId)
+              .UsingJobData("eventId", eventId.ToString())
               .Build();
 
             var scheduler = await _schedulerFactory.GetScheduler();
@@ -49,6 +50,20 @@ namespace EventPlatform.BackgroundScheduller
                 .Build();
 
             await scheduler.ScheduleJob(jobDetail, trigger, cancellationToken);
+        }
+
+        public async Task ScheduleChangeEventStatus(DateTimeOffset executeAt, EventStatus status, Guid eventId, CancellationToken cancellationToken)
+        {
+            var jobDetail = JobBuilder.Create<ChangeEventStatus>()
+              .WithIdentity($"change-event-status:{eventId}")
+              .UsingJobData("eventId", eventId.ToString())
+              .UsingJobData("status", status.ToString())
+              .Build();
+
+            var scheduler = await _schedulerFactory.GetScheduler();
+            var trigger = TriggerBuilder.Create()
+                .StartAt(executeAt)
+                .Build();
         }
 
         public async Task ScheduleEmailSend(DateTimeOffset executeAt, string email, string subject, string content, CancellationToken cancellationToken)

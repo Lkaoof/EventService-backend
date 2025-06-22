@@ -10,7 +10,7 @@ namespace EventPlatform.Application.Features.Notifications.Command.Create
     {
         public async Task<Result<NotificationDto>> Handle(CreateNotificationCommand request, CancellationToken cancellationToken)
         {
-            return await actions.Create<Notification, NotificationDto>(request, cancellationToken);
+            return await actions.Create<Notification, NotificationDto>(request.Entity, cancellationToken);
         }
     }
 }

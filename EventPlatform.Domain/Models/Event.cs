@@ -11,8 +11,6 @@ namespace EventPlatform.Domain.Models
 
         public double Longitude { get; set; }
 
-        public uint TotalTickets { get; set; }
-
         public uint ReturnedTickets { get; set; }
 
         public DateTime EndAt { get; set; }

@@ -509,12 +509,6 @@ namespace EventPlatform.Database.Migrations
                         .HasColumnType("double precision")
                         .HasColumnName("longitude");
 
-                    b.Property<string>("ModerationStatus")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("moderation_status");
-
                     b.Property<long>("ReturnedTickets")
                         .HasColumnType("bigint")
                         .HasColumnName("returned_tickets");
@@ -523,15 +517,17 @@ namespace EventPlatform.Database.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("start_at");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("moderation_status");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)")
                         .HasColumnName("title");
-
-                    b.Property<long>("TotalTickets")
-                        .HasColumnType("bigint")
-                        .HasColumnName("total_tickets");
 
                     b.HasKey("Id");
 
@@ -620,6 +616,50 @@ namespace EventPlatform.Database.Migrations
                     b.ToTable("notifications", (string)null);
                 });
 
+            modelBuilder.Entity("EventPlatform.Domain.Models.Purchase", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric(10,2)")
+                        .HasColumnName("amount");
+
+                    b.Property<string>("BillUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("customer_id");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("ProductUrl")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("product_url");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("purchases", (string)null);
+                });
+
             modelBuilder.Entity("EventPlatform.Domain.Models.RefreshToken", b =>
                 {
                     b.Property<Guid>("Id")
@@ -667,6 +707,10 @@ namespace EventPlatform.Database.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("name");
 
+                    b.Property<bool>("isPublic")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_public");
+
                     b.HasKey("Id");
 
                     b.ToTable("roles", (string)null);
@@ -696,6 +740,10 @@ namespace EventPlatform.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
+
+                    b.Property<long>("AvailableCount")
+                        .HasColumnType("bigint")
+                        .HasColumnName("available_count");
 
                     b.Property<Guid>("EventId")
                         .HasColumnType("uuid");
@@ -776,10 +824,6 @@ namespace EventPlatform.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric(10,2)")
-                        .HasColumnName("price");
 
                     b.Property<Guid>("TicketId")
                         .HasColumnType("uuid");
@@ -925,6 +969,17 @@ namespace EventPlatform.Database.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("EventPlatform.Domain.Models.Purchase", b =>
+                {
+                    b.HasOne("EventPlatform.Domain.Models.User", "Customer")
+                        .WithMany("Purchases")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("EventPlatform.Domain.Models.RefreshToken", b =>
                 {
                     b.HasOne("EventPlatform.Domain.Models.User", "User")
@@ -1037,6 +1092,8 @@ namespace EventPlatform.Database.Migrations
                     b.Navigation("Events");
 
                     b.Navigation("Notifications");
+
+                    b.Navigation("Purchases");
 
                     b.Navigation("RefreshTokens");
 

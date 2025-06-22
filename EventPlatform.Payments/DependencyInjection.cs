@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using EventPlatform.Application.Interfaces.Infrastructure;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventPlatform.Payments
@@ -7,7 +8,7 @@ namespace EventPlatform.Payments
     {
         public static IServiceCollection AddPayments(this IServiceCollection services, IConfiguration configuration)
         {
-            //services.AddSingleton<>();
+            services.AddSingleton<IPaymentsProvider, MockPaymentsProvider>();
             return services;
         }
     }

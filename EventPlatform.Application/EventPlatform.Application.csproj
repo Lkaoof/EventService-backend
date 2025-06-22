@@ -19,8 +19,4 @@
     <ProjectReference Include="..\EventPlatform.Domain\EventPlatform.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Auth\Command\" />
-  </ItemGroup>
-
 </Project>

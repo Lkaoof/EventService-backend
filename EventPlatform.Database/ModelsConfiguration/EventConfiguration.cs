@@ -54,10 +54,6 @@ namespace EventPlatform.Database.ModelsConfiguration
                 .HasColumnName("longitude")
                 .HasColumnType("double precision");
 
-            builder.Property(e => e.TotalTickets)
-                .HasColumnName("total_tickets")
-                .HasColumnType("bigint");
-
             builder.Property(e => e.ReturnedTickets)
                 .HasColumnName("returned_tickets")
                 .HasColumnType("bigint");

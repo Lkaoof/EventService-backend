@@ -9,11 +9,13 @@ using EventPlatform.Database;
 using EventPlatform.Email;
 using EventPlatform.Jwt;
 using EventPlatform.PasswordHash;
+using EventPlatform.Payments;
 using EventPlatform.RandomCodeGeneration;
 using EventPlatform.WebApi.Initializers;
 using GraphQL.Server.Ui.Altair;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -40,6 +42,7 @@ services.AddBackgroundScheduler(config);
 services.AddApplication(config);
 services.AddJwtProvider(config);
 services.AddPasswordHasher(config);
+services.AddPayments(config);
 
 var JwtOptions = config.GetSection("JwtOptions");
 services.AddAuthentication(options =>
@@ -88,6 +91,8 @@ services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "API for EventPlatform",
     });
+
+    c.OrderActionsBy((apiDesc) => $"{apiDesc.RelativePath}_{apiDesc.HttpMethod}");
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -170,8 +175,11 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = serviceProvider.GetRequiredService<PostgresDatabaseContext>();
+        context.Database.Migrate();
+
         var cache = serviceProvider.GetRequiredService<ICache>();
         await cache.RemoveKeysMask("*");
+
         DbInitializer.Initialize(context);
     }
     catch (Exception)
@@ -195,4 +203,5 @@ if (app.Environment.IsDevelopment())
     });
     app.MapOpenApi();
 }
+
 app.Run();

@@ -10,7 +10,7 @@ namespace EventPlatform.Application.Features.Tickets.Command.Create
     {
         public async Task<Result<TicketDto>> Handle(CreateTicketCommand request, CancellationToken cancellationToken)
         {
-            return await actions.Create<Ticket, TicketDto>(request, cancellationToken);
+            return await actions.Create<Ticket, TicketDto>(request.Entity, cancellationToken, async (ticket, _) => ticket.EventId = request.EventId);
         }
     }
 }

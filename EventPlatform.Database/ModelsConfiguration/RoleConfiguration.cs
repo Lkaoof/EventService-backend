@@ -19,6 +19,10 @@ namespace EventPlatform.Database.ModelsConfiguration
                 .HasMaxLength(50)
                 .IsRequired();
 
+            builder.Property(r => r.isPublic)
+                .HasColumnName("is_public")
+                .IsRequired();
+
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using EventPlatform.Application.Features.Events.Query.Get;
-using EventPlatform.Application.Features.Events.Query.GetAsPage;
+﻿using EventPlatform.Application.Features.Events.Query.GetApprovedEvents;
 using EventPlatform.Application.Features.Events.Query.GetById;
 using EventPlatform.Application.Models.Application.Pagination;
 using EventPlatform.WebApi.Common;
@@ -15,12 +14,6 @@ namespace EventPlatform.WebApi.Controllers.Customer
     [Route("/api/events")]
     public class EventsReadController(IMediator mediator) : ControllerApiBase
     {
-        [HttpGet]
-        public async Task<IActionResult> GetAll(CancellationToken ct)
-        {
-            return Ok(await mediator.Send(new GetEventsQuery(), ct));
-        }
-
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id, CancellationToken ct)
         {
@@ -30,7 +23,7 @@ namespace EventPlatform.WebApi.Controllers.Customer
         [HttpGet("page")]
         public async Task<IActionResult> GetAsPage([FromQuery] Pageable page, CancellationToken ct)
         {
-            return Ok(await mediator.Send(new GetEventAsPageQuery() { Page = page }));
+            return Ok(await mediator.Send(new GetApprovedEventsQuery() { Page = page }));
         }
     }
 }

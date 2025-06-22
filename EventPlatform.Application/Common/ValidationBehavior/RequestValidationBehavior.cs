@@ -28,21 +28,22 @@ namespace EventPlatform.Application.Common.ValidationBehavior
                 {
                     var innerType = typeof(TResponse).GetGenericArguments()[0];
 
-                    var failureMethod = typeof(Result<>)
-                        .MakeGenericType(innerType)
-                        .GetMethod("Failure", [typeof(string)]);
+                    var failureMethod = typeof(Result)
+                        .GetMethod("Failure", 1, [typeof(string), typeof(Status)])!
+                        .MakeGenericMethod(innerType);
 
                     if (failureMethod != null)
                     {
-                        return (TResponse)failureMethod.Invoke(null, [string.Join(",\n", failures)]);
+                        var res = failureMethod.Invoke(null, [string.Join(",\n", failures), Status.Validation])!;
+                        return (TResponse)res;
                     }
                 }
                 else if (type == typeof(Result))
                 {
-                    return (TResponse)(object)Result.Failure(string.Join(",\n", failures));
+                    return (TResponse)(object)Result.Failure(string.Join(",\n", failures), Status.Validation);
                 }
 
-                //throw new ValidationException(failures);
+                throw new ValidationException(failures);
             }
 
             return await next(cancellationToken);

@@ -10,6 +10,8 @@ namespace EventPlatform.Domain.Models
 
         public decimal Price { get; set; }
 
+        public uint AvailableCount { get; set; }
+
         // Relations
         public Guid EventId { get; set; }
 

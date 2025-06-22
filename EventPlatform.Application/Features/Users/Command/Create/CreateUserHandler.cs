@@ -12,8 +12,17 @@ namespace EventPlatform.Application.Features.Users.Command.Create
     {
         public async Task<Result<UserDto>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            return await actions.Create<User, UserDto>(request, cancellationToken,
-                async (user, _) => user.PasswordHash = passwordHasher.Hash(request.Password));
+            return await actions.Create<User, UserDto>(request.Entity, cancellationToken,
+                async (user, context) =>
+                {
+                    user.PasswordHash = passwordHasher.Hash(request.Entity.Password);
+
+                    var roles = request.Entity.RoleIds
+                        .Select(id => new Role() { Id = id })
+                        .ToList();
+                    context.Roles.AttachRange(roles);
+                    user.Roles = roles;
+                });
         }
     }
 }

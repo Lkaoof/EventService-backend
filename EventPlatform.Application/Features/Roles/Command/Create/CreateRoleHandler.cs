@@ -10,7 +10,7 @@ namespace EventPlatform.Application.Features.Roles.Command.Create
     {
         public async Task<Result<RoleDto>> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
         {
-            return await actions.Create<Role, RoleDto>(request, cancellationToken);
+            return await actions.Create<Role, RoleDto>(request.Entity, cancellationToken);
         }
     }
 }

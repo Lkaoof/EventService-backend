@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using EventPlatform.Application.Models.Application.Pagination;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,9 +27,10 @@ namespace EventPlatform.Application.Extentions
                 throw new ArgumentOutOfRangeException(nameof(page.Size), "Размер страницы должен быть > 0");
 
             var total = query.Count();
-            var items = await query.Skip(page.Index * page.Size).Take(page.Size).ToListAsync();
+            var items = await query.Skip(page.Index * page.Size).Take(page.Size)
+                .ProjectTo<M>(mapper.ConfigurationProvider).ToListAsync();
 
-            return new Page<M>(mapper.Map<IEnumerable<M>>(items), page.Index, total, items.Count);
+            return new Page<M>(items, page.Index, total, items.Count);
         }
     }
 }

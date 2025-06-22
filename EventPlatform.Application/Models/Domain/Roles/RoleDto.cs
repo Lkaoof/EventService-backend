@@ -7,5 +7,6 @@ namespace EventPlatform.Application.Models.Domain.Roles
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public bool isPublic { get; set; }
     }
 }

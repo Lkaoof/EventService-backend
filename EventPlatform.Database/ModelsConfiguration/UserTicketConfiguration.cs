@@ -15,9 +15,9 @@ namespace EventPlatform.Database.ModelsConfiguration
                 .HasColumnName("id")
                 .ValueGeneratedOnAdd();
 
-            builder.Property(ut => ut.Price)
-                .HasColumnName("price")
-                .HasColumnType("numeric(10,2)");
+            //builder.Property(ut => ut.Price)
+            //    .HasColumnName("price")
+            //    .HasColumnType("numeric(10,2)");
 
             builder.Property(ut => ut.TicketStatus)
                 .HasColumnName("ticket_status")

@@ -10,7 +10,7 @@ namespace EventPlatform.Application.Features.UserTickets.Command.Create
     {
         public async Task<Result<UserTicketDto>> Handle(CreateUserTicketCommand request, CancellationToken cancellationToken)
         {
-            return await actions.Create<UserTicket, UserTicketDto>(request, cancellationToken);
+            return await actions.Create<UserTicket, UserTicketDto>(request.Entity, cancellationToken);
         }
     }
 }

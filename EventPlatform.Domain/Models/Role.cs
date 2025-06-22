@@ -8,6 +8,8 @@ namespace EventPlatform.Domain.Models
 
         public string Name { get; set; } = string.Empty;
 
+        public bool isPublic { get; set; }
+
         // Relations
         public ICollection<User> Users { get; set; } = [];
     }

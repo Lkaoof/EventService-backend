@@ -35,7 +35,7 @@ namespace EventPlatform.BackgroundScheduller
                 options.WaitForJobsToComplete = true;
             });
 
-            services.AddSingleton<IQuartzJobScheduler, QuartzJobScheduler>();
+            services.AddSingleton<IJobScheduler, QuartzJobScheduler>();
 
             return services;
         }

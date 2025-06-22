@@ -18,6 +18,7 @@ namespace EventPlatform.WebApi.Common
                 Status.Conflict => Conflict(result.Message),
                 Status.Accepted => Accepted(result.Message),
                 Status.NotFound => NotFound(result.Message),
+                Status.Validation => BadRequest(result.Message),
                 Status.BadRequest => BadRequest(result.Message),
                 _ => StatusCode(500, result.Message),
             };
@@ -36,6 +37,7 @@ namespace EventPlatform.WebApi.Common
                 Status.Forbiden => Forbid(),
                 Status.NotFound => NotFound(),
                 Status.Error => Problem(result.Message),
+                Status.Validation => BadRequest(result.Message),
                 Status.BadRequest => BadRequest(result.Message),
                 _ => StatusCode(500, result.Message),
             };

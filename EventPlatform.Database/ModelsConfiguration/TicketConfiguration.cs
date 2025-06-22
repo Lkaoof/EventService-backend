@@ -23,6 +23,10 @@ namespace EventPlatform.Database.ModelsConfiguration
                 .HasColumnName("price")
                 .HasColumnType("numeric(10,2)");
 
+            builder.Property(e => e.AvailableCount)
+                .HasColumnName("available_count")
+                .HasColumnType("bigint");
+
             builder.HasMany(t => t.UserTickets)
                 .WithOne(ut => ut.Ticket)
                 .HasForeignKey(t => t.TicketId)

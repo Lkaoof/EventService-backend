@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography;
-using EventPlatform.Database;
+﻿using EventPlatform.Database;
 using EventPlatform.Domain.Models;
 using EventPlatform.PasswordHash;
 
@@ -66,9 +65,6 @@ namespace EventPlatform.WebApi.Initializers
             var notifications = GenerateNotifications(users);
             context.Notifications.AddRange(notifications);
 
-            var refreshTokens = GenerateRefreshTokens(users);
-            context.RefreshTokens.AddRange(refreshTokens);
-
             context.SaveChanges();
         }
 
@@ -76,9 +72,9 @@ namespace EventPlatform.WebApi.Initializers
         {
             return new List<Role>
             {
-                new Role { Id = Guid.NewGuid(), Name = "Admin" },
-                new Role { Id = Guid.NewGuid(), Name = "Organizer" },
-                new Role { Id = Guid.NewGuid(), Name = "User" }
+                new Role { Id = Guid.NewGuid(), Name = "Admin"},
+                new Role { Id = Guid.NewGuid(), Name = "Organizer", isPublic = true},
+                new Role { Id = Guid.NewGuid(), Name = "User", isPublic = true}
             };
         }
 
@@ -166,7 +162,6 @@ namespace EventPlatform.WebApi.Initializers
                     Description = "Annual rock music festival",
                     Latitude = 40.7128,
                     Longitude = -74.0060,
-                    TotalTickets = 5000,
                     ReturnedTickets = 50,
                     StartAt = DateTime.UtcNow.AddDays(30),
                     EndAt = DateTime.UtcNow.AddDays(33),
@@ -184,7 +179,6 @@ namespace EventPlatform.WebApi.Initializers
                     Description = "International technology conference",
                     Latitude = 37.7749,
                     Longitude = -122.4194,
-                    TotalTickets = 2000,
                     ReturnedTickets = 20,
                     StartAt = DateTime.UtcNow.AddDays(45),
                     EndAt = DateTime.UtcNow.AddDays(48),
@@ -208,21 +202,25 @@ namespace EventPlatform.WebApi.Initializers
                     Id = Guid.NewGuid(),
                     Title = "VIP Pass",
                     Price = 299.99m,
-                    Event = events[0]
+                    Event = events[0],
+                    AvailableCount = 5,
                 },
                 new Ticket
                 {
                     Id = Guid.NewGuid(),
                     Title = "General Admission",
                     Price = 99.99m,
-                    Event = events[0]
+                    Event = events[0],
+                    AvailableCount = 9,
+
                 },
                 new Ticket
                 {
                     Id = Guid.NewGuid(),
                     Title = "Conference Full Pass",
                     Price = 499.99m,
-                    Event = events[1]
+                    Event = events[1],
+                    AvailableCount = 1,
                 }
             };
         }
@@ -234,7 +232,6 @@ namespace EventPlatform.WebApi.Initializers
                 new UserTicket
                 {
                     Id = Guid.NewGuid(),
-                    Price = tickets[0].Price,
                     TicketStatus = UserTicketStatus.Active,
                     User = users[2],
                     Ticket = tickets[0]
@@ -242,7 +239,6 @@ namespace EventPlatform.WebApi.Initializers
                 new UserTicket
                 {
                     Id = Guid.NewGuid(),
-                    Price = tickets[1].Price,
                     TicketStatus = UserTicketStatus.Returned,
                     User = users[2],
                     Ticket = tickets[1]
@@ -271,26 +267,6 @@ namespace EventPlatform.WebApi.Initializers
                     User = users[1]
                 }
             };
-        }
-
-        private static List<RefreshToken> GenerateRefreshTokens(List<User> users)
-        {
-            return new List<RefreshToken>
-            {
-                new RefreshToken
-                {
-                    Id = Guid.NewGuid(),
-                    Token = GenerateRandomToken(),
-                    CreatedAt = DateTime.UtcNow,
-                    ExpiresAt = DateTime.UtcNow.AddDays(7),
-                    User = users[0]
-                }
-            };
-        }
-
-        private static string GenerateRandomToken()
-        {
-            return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
         }
 
     }

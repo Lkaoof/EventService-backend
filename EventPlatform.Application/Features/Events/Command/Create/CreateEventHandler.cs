@@ -13,7 +13,7 @@ namespace EventPlatform.Application.Features.Events.Command.Create
         {
             return await actions.Create<Event, EventDto>(request, cancellationToken, async (event_, context) =>
             {
-                foreach (var tagTitle in request.TagTitles)
+                foreach (var tagTitle in request.Entity.TagTitles)
                 {
                     var tag = await context.EventTags.FirstOrDefaultAsync(t => t.Title == tagTitle);
                     if (tag is null)

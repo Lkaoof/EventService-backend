@@ -1,20 +1,15 @@
 ﻿using EventPlatform.Application.Common.CacheBehavior;
-using EventPlatform.Application.Common.Mapping;
 using EventPlatform.Application.Common.ResultWrapper;
 using EventPlatform.Application.Models.Domain.Tickets;
-using EventPlatform.Domain.Models;
 using MediatR;
 
 namespace EventPlatform.Application.Features.Tickets.Command.Create
 {
-    public class CreateTicketCommand : IRequest<Result<TicketDto>>, ICacheInvalidate, IMapWith<Ticket>
+    public class CreateTicketCommand : IRequest<Result<TicketDto>>, ICacheInvalidate
     {
-        public string Title { get; set; } = string.Empty;
+        public Guid EventId { get; set; }
 
-        public decimal Price { get; set; }
-
-        //public Guid EventId { get; set; }
-
-        public string[] CacheKeys => ["tickets*"];
+        public TicketCreateDto Entity { get; set; }
+        public string[] CacheKeys => ["tickets*", $"event:{EventId}"];
     }
 }

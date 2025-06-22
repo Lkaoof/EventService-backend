@@ -8,6 +8,7 @@ namespace EventPlatform.Application.Models.Domain.Tickets
         public Guid Id { get; set; }
         public string Title { get; set; }
         public decimal Price { get; set; }
+        public uint AvailableCount { get; set; }
         public Guid EventId { get; set; }
     }
 }

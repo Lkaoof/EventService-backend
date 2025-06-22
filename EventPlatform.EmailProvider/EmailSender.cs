@@ -36,7 +36,7 @@ namespace EventPlatform.Email
             await client.DisconnectAsync(true);
         }
 
-        public async Task SenAsync(IEnumerable<string> emails, string subject, string content, CancellationToken ct)
+        public async Task SendAsync(IEnumerable<string> emails, string subject, string content, CancellationToken ct)
         {
             foreach (var email in emails)
             {

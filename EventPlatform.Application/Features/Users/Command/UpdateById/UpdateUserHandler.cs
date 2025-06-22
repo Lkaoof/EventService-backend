@@ -13,13 +13,7 @@ namespace EventPlatform.Application.Features.Users.Command.UpdateById
         {
             return await actions.Update<User, UserDto>(request.Id, request.User, cancellationToken, (user) =>
             {
-                var now = DateTime.UtcNow;
-                user.LastUpdatedAt = now;
-                if (request.User.Password != null)
-                {
-                    user.PasswordHash = hasher.Hash(request.User.Password);
-                    user.PasswordUpdatedAt = now;
-                }
+                user.LastUpdatedAt = DateTime.UtcNow;
             });
         }
     }

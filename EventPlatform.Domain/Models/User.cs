@@ -30,6 +30,8 @@ namespace EventPlatform.Domain.Models
 
         public ICollection<UserTicket> Tickets { get; set; } = [];
 
+        public ICollection<Purchase> Purchases { get; set; } = [];
+
         public ICollection<Notification> Notifications { get; set; } = [];
 
         public ICollection<RefreshToken> RefreshTokens { get; set; } = [];

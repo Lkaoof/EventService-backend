@@ -1,7 +1,9 @@
 ﻿using EventPlatform.Application.Common.ResultWrapper;
+using EventPlatform.Application.Features.Auth.Command.ChangePassowrd;
 using EventPlatform.Application.Features.Auth.Query.GetIdentityByEmail;
 using EventPlatform.Application.Features.Auth.Query.GetIdentityById;
 using EventPlatform.Application.Features.Auth.Query.GetIdentityByUsername;
+using EventPlatform.Application.Features.Roles.Query.GetPublic;
 using EventPlatform.Application.Features.Users.Command.Create;
 using EventPlatform.Application.Features.Users.Command.SendConfirmationCode;
 using EventPlatform.Application.Features.Users.Command.VerifyConfirmationCode;
@@ -23,8 +25,8 @@ namespace EventPlatform.WebApi.Controllers.Auth
     {
         private CookieOptions _cookieOptions => new()
         {
-            Path = "/api/Auth",
-            Expires = DateTime.UtcNow.AddDays(15),
+            Path = "/api/auth",
+            Expires = DateTime.UtcNow.Add(jwtProvider.RefreshTokenExpiresDays),
             HttpOnly = true,
             SameSite = SameSiteMode.Lax,
             Secure = false,
@@ -70,44 +72,45 @@ namespace EventPlatform.WebApi.Controllers.Auth
             return Ok(new { AccessToken = tokens.accessToken });
         }
 
-        [HttpPost("logout")]
-        public async Task<IActionResult> Logout(CancellationToken ct)
-        {
-            var refreshToken = Request.Cookies[jwtProvider.CookieName];
-
-            if (string.IsNullOrEmpty(refreshToken))
-            {
-                return Unauthorized("Отсутствует refresh токен");
-            }
-
-            await jwtProvider.RevokeUserTokenAsync(refreshToken, ct);
-            Response.Cookies.Delete(jwtProvider.CookieName, _cookieOptions);
-
-            return Ok();
-        }
-
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] CreateUserCommand reqwest, CancellationToken ct)
+        public async Task<IActionResult> Register([FromBody] UserCreateDto user, CancellationToken ct)
         {
-            var result = await mediator.Send(new GetIdentityByEmailQuery() { Email = reqwest.Email }, ct);
+            var result = await mediator.Send(new GetIdentityByEmailQuery() { Email = user.Email }, ct);
             if (result.IsSuccess)
             {
-                return Conflict(reqwest.Name);
+                return Conflict(user.Name);
             }
 
-            var verification = await mediator.Send(new VerifyConfirmationCodeCommand() { Code = reqwest.ConfirmationCode, Email = reqwest.Email }, ct);
+            var verification = await mediator.Send(new VerifyConfirmationCodeCommand() { Code = user.ConfirmationCode, Email = user.Email }, ct);
             if (verification.IsFailure)
             {
                 return ToActionResult(verification);
             }
 
-            var newUser = await mediator.Send(reqwest, ct);
+            var newUser = await mediator.Send(new CreateUserCommand() { Entity = user }, ct);
             if (newUser.IsFailure)
             {
                 return ToActionResult(newUser);
             }
 
             return Created();
+        }
+
+        [HttpPost("restore-password")]
+        public async Task<IActionResult> RestorePassowrd(string email, string confirmationCode, string newPassword, CancellationToken ct)
+        {
+            var identity = await mediator.Send(new GetIdentityByEmailQuery() { Email = email }, ct);
+            if (identity.IsFailure) return ToActionResult(identity);
+
+            var confirmation = await mediator.Send(new VerifyConfirmationCodeCommand()
+            {
+                Email = email,
+                Code = confirmationCode
+            });
+            if (confirmation.IsFailure) return ToActionResult(confirmation);
+
+            var change = await mediator.Send(new ChangeUserPasswordCommand() { UserId = identity.Value!.Id, Password = newPassword });
+            return ToActionResult(change);
         }
 
         [HttpPost("refresh")]
@@ -147,6 +150,22 @@ namespace EventPlatform.WebApi.Controllers.Auth
             return Ok(new { AccessToken = tokens.accessToken });
         }
 
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout(CancellationToken ct)
+        {
+            var refreshToken = Request.Cookies[jwtProvider.CookieName];
+
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                return Unauthorized("Отсутствует refresh токен");
+            }
+
+            await jwtProvider.RevokeUserTokenAsync(refreshToken, ct);
+            Response.Cookies.Delete(jwtProvider.CookieName, _cookieOptions);
+
+            return Ok();
+        }
+
         [Authorize]
         [HttpPost("logout/all")]
         public async Task<IActionResult> LogoutFromAll(CancellationToken ct)
@@ -171,6 +190,12 @@ namespace EventPlatform.WebApi.Controllers.Auth
             return Ok();
         }
 
+        [HttpGet("public-roles")]
+        public async Task<IActionResult> GetPublicRoles(CancellationToken ct)
+        {
+            return Ok(await mediator.Send(new GetPublicRolesQuery(), ct));
+        }
+
         [Authorize]
         [HttpGet("sessions")]
         public async Task<IActionResult> GetActiveSessions(CancellationToken ct)
@@ -178,31 +203,10 @@ namespace EventPlatform.WebApi.Controllers.Auth
             return Ok(tokenService.GetActiveTokensByUserIdAsync(User.Id(), ct));
         }
 
-        [HttpPost("confirm")]
+        [HttpPost("send-confirm-code")]
         public async Task<IActionResult> SendConfirmationCode([FromQuery] string email, CancellationToken ct)
         {
             return ToActionResult(await mediator.Send(new SendConfirmationCodeCommand() { Email = email }, ct));
         }
-
-        //[HttpGet("verify")]
-        //public async Task<IActionResult> VerifyConfirmationCode(string code, CancellationToken ct)
-        //{
-        //    return ToActionResult(await mediator.Send(new VerifyConfirmationCodeCommand() { Code = code }, ct));
-        //}
-
-        //[HttpPost("send-mail")]
-        //public async Task<IActionResult> SendImail(string email, string subject, string content, CancellationToken ct)
-        //{
-        //    //await _emailSender.SendAsync(email, subject, content, ct);
-        //    await jobScheduler.ScheduleEmailSend(DateTimeOffset.Now.Add(TimeSpan.FromSeconds(10)), email, subject, content, ct);
-        //    //await _jobScheduler.ScheduleAwait(DateTimeOffset.Now.Add(TimeSpan.FromSeconds(5)), Guid.NewGuid(), Guid.NewGuid());
-        //    return Ok("Sended!");
-        //}
-
-        //[HttpGet("job")]
-        //public async Task<IActionResult> ScheduleJob(CancellationToken ct)
-        //{
-        //    return Ok("Nothing");
-        //}
     }
 }

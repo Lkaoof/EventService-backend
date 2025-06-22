@@ -5,6 +5,7 @@ using EventPlatform.Application.Features.Roles.Query.Get;
 using EventPlatform.Application.Features.Roles.Query.GetAsPage;
 using EventPlatform.Application.Features.Roles.Query.GetById;
 using EventPlatform.Application.Models.Application.Pagination;
+using EventPlatform.Application.Models.Domain.Roles;
 using EventPlatform.WebApi.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -13,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventPlatform.WebApi.Controllers.Basic
 {
     [Tags("Admin")]
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("/api/roles")]
     public class RolesController(IMediator mediator) : ControllerApiBase
@@ -37,9 +38,9 @@ namespace EventPlatform.WebApi.Controllers.Basic
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateRoleCommand request, CancellationToken ct)
+        public async Task<IActionResult> Create(RoleCreateDto enity, CancellationToken ct)
         {
-            return ToActionResult(await mediator.Send(request, ct));
+            return ToActionResult(await mediator.Send(new CreateRoleCommand() { Entity = enity }, ct));
         }
 
         [HttpPut("{id}")]

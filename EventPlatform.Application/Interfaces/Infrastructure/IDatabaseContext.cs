@@ -15,6 +15,7 @@ namespace EventPlatform.Application.Interfaces.Infrastructure
         DbSet<Ticket> Tickets { get; set; }
         DbSet<User> Users { get; set; }
         DbSet<UserTicket> UsersTickets { get; set; }
+        DbSet<Purchase> Purchases { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cts);
     }

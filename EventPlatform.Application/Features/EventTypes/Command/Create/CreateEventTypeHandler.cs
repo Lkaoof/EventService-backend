@@ -10,7 +10,7 @@ namespace EventPlatform.Application.Features.EventTypes.Command.Create
     {
         public async Task<Result<EventTypeDto>> Handle(CreateEventTypeCommand request, CancellationToken cancellationToken)
         {
-            return await actions.Create<EventType, EventTypeDto>(request, cancellationToken);
+            return await actions.Create<EventType, EventTypeDto>(request.Entity, cancellationToken);
         }
     }
 }

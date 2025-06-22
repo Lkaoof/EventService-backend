@@ -1,15 +1,12 @@
 ﻿using EventPlatform.Application.Features.Users.Command.Create;
 using EventPlatform.Application.Features.Users.Command.DeleteById;
-using EventPlatform.Application.Features.Users.Command.SendConfirmationCode;
 using EventPlatform.Application.Features.Users.Command.UpdateById;
-using EventPlatform.Application.Features.Users.Command.VerifyConfirmationCode;
-using EventPlatform.Application.Features.Users.Query.Get;
 using EventPlatform.Application.Features.Users.Query.GetAsPage;
 using EventPlatform.Application.Features.Users.Query.GetById;
 using EventPlatform.Application.Interfaces.Infrastructure;
 using EventPlatform.Application.Models.Application.Pagination;
+using EventPlatform.Application.Models.Domain.Users;
 using EventPlatform.WebApi.Common;
-using EventPlatform.WebApi.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +17,7 @@ namespace EventPlatform.WebApi.Controllers.Basic
     [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("/api/users")]
-    public class UsersController(IMediator mediator, IEmailSender emailSender, IQuartzJobScheduler jobScheduler, IRandomCodeGeneration codeGenerator) : ControllerApiBase
+    public class UsersController(IMediator mediator, IEmailSender emailSender, IJobScheduler jobScheduler, IRandomCodeGeneration codeGenerator) : ControllerApiBase
     {
         //[HttpGet]
         //public async Task<IActionResult> GetAll(CancellationToken ct)
@@ -53,9 +50,9 @@ namespace EventPlatform.WebApi.Controllers.Basic
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateUserCommand request, CancellationToken ct)
+        public async Task<IActionResult> Create(UserCreateDto enity, CancellationToken ct)
         {
-            return ToActionResult(await mediator.Send(request, ct));
+            return ToActionResult(await mediator.Send(new CreateUserCommand() { Entity = enity }, ct));
         }
     }
 }

@@ -13,7 +13,6 @@ namespace EventPlatform.Application.Models.Domain.Events
         public Guid Id { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public uint TotalTickets { get; set; }
         public uint AvailableTickets { get; set; }
         public DateTime EndAt { get; set; }
         public DateTime StartAt { get; set; }

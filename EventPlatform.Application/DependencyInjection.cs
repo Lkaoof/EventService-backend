@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using EventPlatform.Application.Common.CacheBehavior;
+﻿using EventPlatform.Application.Common.CacheBehavior;
 using EventPlatform.Application.Common.ValidationBehavior;
 using EventPlatform.Application.Features.Common;
 using EventPlatform.Application.Interfaces.Application;
@@ -29,7 +28,7 @@ namespace EventPlatform.Application
 
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
 
-            services.AddValidatorsFromAssemblies([Assembly.GetExecutingAssembly()]);
+            services.AddValidatorsFromAssemblies([typeof(DependencyInjection).Assembly]);
 
             return services;
         }

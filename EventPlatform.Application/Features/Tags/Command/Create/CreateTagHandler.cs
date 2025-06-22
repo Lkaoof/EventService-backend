@@ -10,7 +10,7 @@ namespace EventPlatform.Application.Features.Tags.Command.Create
     {
         public async Task<Result<TagDto>> Handle(CreateTagCommand request, CancellationToken cancellationToken)
         {
-            return await actions.Create<Tag, TagDto>(request, cancellationToken);
+            return await actions.Create<Tag, TagDto>(request.Entity, cancellationToken);
         }
     }
 }

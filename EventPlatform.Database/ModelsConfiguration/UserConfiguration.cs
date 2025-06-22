@@ -71,6 +71,11 @@ namespace EventPlatform.Database.ModelsConfiguration
                 .HasForeignKey(n => n.UserId)
                 .IsRequired();
 
+            builder.HasMany(u => u.Purchases)
+                .WithOne(n => n.Customer)
+                .HasForeignKey(n => n.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired();
         }
     }
 }

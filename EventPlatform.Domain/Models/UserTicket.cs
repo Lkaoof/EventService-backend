@@ -8,8 +8,6 @@ namespace EventPlatform.Domain.Models
 
         public UserTicketStatus TicketStatus { get; set; } = UserTicketStatus.Active;
 
-        public decimal Price { get; set; }
-
         public Guid TicketId { get; set; }
 
         public Ticket Ticket { get; set; } = null!;

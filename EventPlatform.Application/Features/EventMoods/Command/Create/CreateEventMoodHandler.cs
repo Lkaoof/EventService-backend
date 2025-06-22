@@ -10,7 +10,7 @@ namespace EventPlatform.Application.Features.EventMoods.Command.Create
     {
         public async Task<Result<EventMoodDto>> Handle(CreateEventMoodCommand request, CancellationToken cancellationToken)
         {
-            return await actions.Create<EventMood, EventMoodDto>(request, cancellationToken);
+            return await actions.Create<EventMood, EventMoodDto>(request.Entity, cancellationToken);
         }
     }
 }
