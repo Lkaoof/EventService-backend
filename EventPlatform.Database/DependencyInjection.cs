@@ -12,7 +12,7 @@ namespace EventPlatform.Database
             var connectionString = configuration["Database:Connection"]
                 ?? throw new ArgumentNullException(nameof(configuration), "Database connection is missing in configuration.");
 
-            services.AddDbContext<PostgresDatabaseContext>(options =>
+            services.AddDbContext<AppDatabaseContext>(options =>
             {
                 options.UseNpgsql(connectionString, options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
                 //options.UseInMemoryDatabase("testdb");
@@ -20,7 +20,7 @@ namespace EventPlatform.Database
 
             services.AddScoped<IDatabaseContext>(provider =>
             {
-                return provider.GetRequiredService<PostgresDatabaseContext>();
+                return provider.GetRequiredService<AppDatabaseContext>();
             });
 
             return services;

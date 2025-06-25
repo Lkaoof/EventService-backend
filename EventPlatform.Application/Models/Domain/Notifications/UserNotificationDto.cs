@@ -8,6 +8,6 @@ namespace EventPlatform.Application.Models.Domain.Notifications
         public Guid Id { get; set; }
         public string Subject { get; set; }
         public string Content { get; set; }
-        public string Type { get; set; } = null!;
+        public NotificationType Type { get; set; }
     }
 }

@@ -1,13 +1,17 @@
 ﻿using EventPlatform.Application.Features.Auth.Query.GetIdentityById;
 using EventPlatform.Application.Features.Events.Query.GetById;
+using EventPlatform.Application.Features.Notifications.Command.Create;
+using EventPlatform.Application.Features.Notifications.Command.SendNotification;
 using EventPlatform.Application.Features.Purchases.Command.Create;
 using EventPlatform.Application.Features.Tickets.Command.DecreaseAvailableCount;
 using EventPlatform.Application.Features.UserTickets.Command.Create;
 using EventPlatform.Application.Interfaces.Infrastructure;
 using EventPlatform.Application.Models.Application.Payment;
 using EventPlatform.Application.Models.Application.Payment.Response;
+using EventPlatform.Application.Models.Domain.Notifications;
 using EventPlatform.Application.Models.Domain.Purchases;
 using EventPlatform.Application.Models.Domain.UserTickets;
+using EventPlatform.Domain.Models;
 using EventPlatform.WebApi.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -19,7 +23,7 @@ namespace EventPlatform.WebApi.Controllers.Payment
     //[Tags("Customer")]
     [ApiController]
     [Route("/api/payment-confirm")]
-    public class PaymentsController(IMediator mediator, IPaymentsProvider payments, ICache cache, IJobScheduler jobs) : ControllerApiBase
+    public class PaymentsController(IMediator mediator, IPaymentsProvider payments, ICache cache, IEmailSender email, IJobScheduler jobs) : ControllerApiBase
     {
         // 5. Получить ответ от сервиса платежей о статусе платежа.
         // 6. Если платеж прошел, сохранить покупку пользователя в postgres 
@@ -46,7 +50,7 @@ namespace EventPlatform.WebApi.Controllers.Payment
                 {
                     Amount = payment.Amount,
                     BillUrl = "",
-                    Status = Domain.Models.PurchaseStatus.Success,
+                    Status = PurchaseStatus.Success,
                     CustomerId = payment.UserId,
                     Date = DateTime.UtcNow,
                     ProductUrl = $"tickets/{payment.TicketId}",
@@ -70,6 +74,20 @@ namespace EventPlatform.WebApi.Controllers.Payment
             var event_ = eventResult.Value!;
             var user = userResult.Value!;
 
+            var notificationCreate = new NotificationCreateDto
+            {
+                UserId = user.Id,
+                Subject = "Покупка билета",
+                Content = $"Покупка билета {payment.TicketId} прошла успешно.",
+                Type = NotificationType.Info
+            };
+
+            var createResult = await mediator.Send(new CreateNotificationCommand { Entity = notificationCreate }, ct);
+            if (createResult.IsFailure) return ToActionResult(createResult);
+            var notificationDto = createResult.Value!;
+            await mediator.Send(new SendNotificationCommand { Notification = notificationDto }, ct);
+
+            await email.SendAsync(user.Email, notificationCreate.Subject, notificationCreate.Content, ct);
             await jobs.ScheduleEventEmailReminder(event_.StartAt.AddHours(-24), user.Email, payment.EventId, ct);
 
             return ToActionResult(purchase);

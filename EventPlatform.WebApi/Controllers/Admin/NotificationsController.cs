@@ -1,4 +1,8 @@
-﻿using EventPlatform.WebApi.Common;
+﻿using AutoMapper;
+using EventPlatform.Application.Features.Notifications.Command.Create;
+using EventPlatform.Application.Features.Notifications.Command.SendNotification;
+using EventPlatform.Application.Models.Domain.Notifications;
+using EventPlatform.WebApi.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,40 +15,16 @@ namespace EventPlatform.WebApi.Controllers.Admin
     [Route("/api/notifications")]
     public class NotificationsController(IMediator mediator) : ControllerApiBase
     {
-        //[HttpGet]
-        //public async Task<IActionResult> GetAll(CancellationToken ct)
-        //{
-        //    return Ok(await mediator.Send(new GetNotificationsQuery(), ct));
-        //}
+        [HttpPost]
+        public async Task<IActionResult> SendTest(NotificationCreateDto notification, IMapper mapper, CancellationToken ct)
+        {
+            var createResult = await mediator.Send(new CreateNotificationCommand { Entity = notification }, ct);
+            if (createResult.IsFailure) return ToActionResult(createResult);
 
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> Get(Guid id, CancellationToken ct)
-        //{
-        //    return ToActionResult(await mediator.Send(new GetNotificationByIdQuery() { Id = id }, ct));
-        //}
+            var notificationDto = createResult.Value!;
+            await mediator.Send(new SendNotificationCommand { Notification = notificationDto }, ct);
 
-        //[HttpGet("page")]
-        //public async Task<IActionResult> GetAsPage([FromQuery] Pageable page, CancellationToken ct)
-        //{
-        //    return Ok(await mediator.Send(new GetNotificationsAsPageQuery() { Page = page }));
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> Create(CreateNotificationCommand request, CancellationToken ct)
-        //{
-        //    return ToActionResult(await mediator.Send(request, ct));
-        //}
-
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> Update(Guid id, NotificationUpdateDto dto, CancellationToken ct)
-        //{
-        //    return ToActionResult(await mediator.Send(new UpdateNotificationByIdCommand() { Id = id, Entity = dto }, ct));
-        //}
-
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
-        //{
-        //    return ToActionResult(await mediator.Send(new DeleteNotificationByIdCommand() { Id = id }, ct));
-        //}
+            return Ok();
+        }
     }
 }

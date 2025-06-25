@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <input type="text" id="accessToken" />
+    <button onclick="connectToHub()">connect</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+    <script>
+        async function connectToHub() {
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/hub/notifications", {
+                    accessTokenFactory: () => getToken()
+                })
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
+
+            connection.on("ReceiveNotification", ({ id, subject, content, type }) => {
+                console.log(`New notification:
+            ID: ${id}
+            Subject: ${subject}
+            Content: ${content}
+            Type: ${type}`);
+            });
+
+            try {
+                await connection.start();
+                console.log("SignalR connected");
+            } catch (err) {
+                console.error("Connection failed:", err);
+                setTimeout(connectToHub, 5000); // Переподключение
+            }
+        }
+
+        function getToken() {
+            let token = document.getElementById("accessToken").value;
+            console.log(token);
+            return token;
+        }
+    </script>
+</body>
+</html>

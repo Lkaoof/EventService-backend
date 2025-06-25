@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace EventPlatform.Database.Migrations
 {
-    [DbContext(typeof(PostgresDatabaseContext))]
+    [DbContext(typeof(AppDatabaseContext))]
     [Migration("20250622061207_UpdateUserTickets2")]
     partial class UpdateUserTickets2
     {

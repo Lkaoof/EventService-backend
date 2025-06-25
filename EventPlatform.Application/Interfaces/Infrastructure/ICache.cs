@@ -15,5 +15,6 @@
         Task SetRemoveAsync(string setKey, string value, CancellationToken ct);
         Task<string?> StringGetAsync(string key, CancellationToken ct);
         Task StringSetAsync(string key, string value, CancellationToken ct, TimeSpan? expiry = null);
+        Task<long> SetLength(string key);
     }
 }

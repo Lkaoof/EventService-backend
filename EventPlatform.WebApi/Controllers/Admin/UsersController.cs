@@ -11,7 +11,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EventPlatform.WebApi.Controllers.Basic
+namespace EventPlatform.WebApi.Controllers.Admin
 {
     [Tags("Admin")]
     [Authorize(Roles = "Admin")]

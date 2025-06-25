@@ -1,4 +1,4 @@
-﻿using EventPlatform.Database;
+﻿using EventPlatform.Application.Interfaces.Infrastructure;
 using EventPlatform.Domain.Models;
 using EventPlatform.PasswordHash;
 
@@ -6,7 +6,7 @@ namespace EventPlatform.WebApi.Initializers
 {
     public static class DbInitializer
     {
-        public static void Initialize(PostgresDatabaseContext context)
+        public static void Initialize(IDatabaseContext context)
         {
             //context.Database.EnsureCreated();
 

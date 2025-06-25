@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventPlatform.Database
 {
-    public class PostgresDatabaseContext(DbContextOptions<PostgresDatabaseContext> options) : DbContext(options), IDatabaseContext
+    public class AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : DbContext(options), IDatabaseContext
     {
         // Identity
         public DbSet<User> Users { get; set; }
@@ -41,6 +41,7 @@ namespace EventPlatform.Database
             {
                 builder.UsePostgreSql();
             });
+
         }
     }
 }

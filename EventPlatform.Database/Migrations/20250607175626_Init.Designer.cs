@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace EventPlatform.Database.Migrations
 {
-    [DbContext(typeof(PostgresDatabaseContext))]
+    [DbContext(typeof(AppDatabaseContext))]
     [Migration("20250607175626_Init")]
     partial class Init
     {

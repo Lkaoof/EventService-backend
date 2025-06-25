@@ -110,6 +110,11 @@ namespace EventPlatform.Cache
             }
         }
 
+        public async Task<long> SetLength(string key)
+        {
+            return await _redis.SetLengthAsync(key);
+        }
+
         private static void ValidateKey(string key)
         {
             if (string.IsNullOrWhiteSpace(key))
