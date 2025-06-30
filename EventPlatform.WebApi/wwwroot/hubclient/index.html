@@ -7,7 +7,6 @@
 <body>
     <input type="text" id="accessToken" />
     <button onclick="connectToHub()">connect</button>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
     <script>
         async function connectToHub() {
@@ -20,10 +19,10 @@
 
             connection.on("ReceiveNotification", ({ id, subject, content, type }) => {
                 console.log(`New notification:
-            ID: ${id}
-            Subject: ${subject}
-            Content: ${content}
-            Type: ${type}`);
+                                    ID: ${id}
+                                    Subject: ${subject}
+                                    Content: ${content}
+                                    Type: ${type}`);
             });
 
             try {
@@ -31,7 +30,7 @@
                 console.log("SignalR connected");
             } catch (err) {
                 console.error("Connection failed:", err);
-                setTimeout(connectToHub, 5000); // Переподключение
+                setTimeout(connectToHub, 5000);
             }
         }
 

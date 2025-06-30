@@ -12,10 +12,6 @@ namespace EventPlatform.Application.Features.Events.Query.GetById
         public async Task<Result<EventDetailDto>> Handle(GetEventByIdQuery request, CancellationToken cancellationToken)
         {
             return await actions.GetById<Event, EventDetailDto>(request.Id, cancellationToken);
-            //return await actions.GetById<Event, EventDetailDto>(async q => await q
-            //    .Where(q => q.Id == request.Id)
-            //    .ProjectTo<EventDetailDto>(mapper.ConfigurationProvider)
-            //    .FirstOrDefaultAsync(cancellationToken), cancellationToken);
         }
     }
 }

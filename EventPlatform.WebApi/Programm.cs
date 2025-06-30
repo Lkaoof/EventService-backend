@@ -180,7 +180,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.InjectStylesheet("/swagger-ui/SwaggerDark.css");
+        //c.InjectStylesheet("/swagger-ui/SwaggerDark.css");
+        c.InjectStylesheet("/swagger-ui/Swagger.css");
         c.InjectJavascript("/swagger-ui/SwaggerScript.js");
         c.DisplayRequestDuration();
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");

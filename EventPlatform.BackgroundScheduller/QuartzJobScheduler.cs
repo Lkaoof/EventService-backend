@@ -10,32 +10,6 @@ namespace EventPlatform.BackgroundScheduller
     public class QuartzJobScheduler(ISchedulerFactory schedulerFactory, ILogger<QuartzJobScheduler> logger) : IJobScheduler
     {
         private readonly ISchedulerFactory _schedulerFactory = schedulerFactory;
-        //private readonly ILogger<QuartzJobScheduler> _logger = logger;
-        //private IScheduler? _scheduler;
-
-        //public async Task StartAsync(CancellationToken cancellationToken)
-        //{
-        //    _scheduler = await _schedulerFactory.GetScheduler(cancellationToken);
-        //    await _scheduler.Start(cancellationToken);
-        //}
-
-        //public async Task ScheduleJobAsync<TJob>(TimeSpan timeOffset, string userId, CancellationToken cancellationToken) where TJob : IJob
-        //{
-        //    _logger.LogInformation("Scheduling job {JobName} for user {UserId} with message", typeof(TJob).Name, userId);
-
-        //    var jobDetail = JobBuilder.Create<TJob>()
-        //        .WithIdentity($"{typeof(TJob).Name}-{userId}")
-        //        .UsingJobData("userId", userId)
-        //        .Build();
-
-        //    var scheduler = await _schedulerFactory.GetScheduler();
-        //    var trigger = TriggerBuilder.Create()
-        //        .StartAt(DateTimeOffset.Now.Add(timeOffset))
-        //        .Build();
-
-        //    await scheduler.ScheduleJob(jobDetail, trigger, cancellationToken);
-        //}
-
         public async Task ScheduleEventEmailReminder(DateTimeOffset executeAt, string email, Guid eventId, CancellationToken cancellationToken)
         {
             var jobDetail = JobBuilder.Create<SendEventEmailReminder>()

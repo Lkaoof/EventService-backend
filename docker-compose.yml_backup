@@ -1,27 +1,26 @@
 services:
-  eventplatform.webapi:
-    image: ${DOCKER_REGISTRY-}eventplatformwebapi
-    build:
-      context: .
-      dockerfile: EventPlatform.WebApi/Dockerfile
+  # eventplatform.webapi:
+  #   image: ${DOCKER_REGISTRY-}eventplatformwebapi
+  #   build:
+  #     context: .
+  #     dockerfile: EventPlatform.WebApi/Dockerfile
   greenmail:
-   container_name: event-platform-greenmail
+   container_name: greenmail
    image: greenmail/standalone
    ports:
      - "3143:3143"
-     - "8888:8080"
+     - "8080:8080"
      - "3025:3025"
    networks:
      - backend
    restart: unless-stopped
-
   redis:
-    container_name: event-platform-redis
+    container_name: event_redis
     image: redis:8-alpine
     ports:
       - "6379:6379"
     volumes:
-      - event-platform-redis_data:/data
+      - event_redis_data:/data
     command: redis-server --requirepass prettypass
     restart: unless-stopped
     networks:
@@ -31,9 +30,9 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
+      
   postgres:
-    container_name: event-platform-postgres
+    container_name: event_postgres
     image: postgres:17-alpine
     environment:
       POSTGRES_DB: "event_platform"
@@ -44,18 +43,18 @@ services:
       - "5444:5432"
     command: -p 5432
     volumes:
-      - event-platform-pg_data:/var/lib/postgresql/data
+      - event_pg_data:/var/lib/postgresql/data
     networks:
       - backend
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U dev -d event_platform"]
+      test: ["CMD-SHELL", "pg_isready -U dev -d livelib"]
       interval: 5s
       timeout: 5s
       retries: 5
 
 volumes:
-  event-platform-redis_data:
-  event-platform-pg_data:
+  event_redis_data:
+  event_pg_data:
 
 networks:
   backend:

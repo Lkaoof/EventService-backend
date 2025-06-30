@@ -7,7 +7,6 @@ namespace EventPlatform.Notifications
 {
     public class NotificationService(IHubContext<NotificationHub> hubContext, IConnectionTracker tracker, IDatabaseContext dbContext) : INotificationService
     {
-
         public async Task SendNotificationAsync(NotificationDto notification)
         {
             var userIdString = notification.UserId.ToString();
