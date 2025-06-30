@@ -11,7 +11,7 @@ namespace EventPlatform.Application.Features.Common
 {
     public class Actions(IMapper mapper, IDatabaseContext context) : IActions
     {
-        public async Task<Result<T>> GetBy<T>(Expression<Func<T, object>> fieldSelector, object value, CancellationToken ct = default, Action<T>? entityAction = default) where T : BaseEntity
+        public async Task<Result<T>> GetBy<T>(Expression<Func<T, object>> fieldSelector, object value, CancellationToken ct = default) where T : BaseEntity
         {
             var set = GetDbSet<T>();
             var predicate = Expression.Lambda<Func<T, bool>>(
@@ -32,7 +32,7 @@ namespace EventPlatform.Application.Features.Common
             return Result.Success(entity);
         }
 
-        public async Task<Result<M>> GetBy<T, M>(Expression<Func<T, object>> fieldSelector, object value, CancellationToken ct = default, Action<T>? entityAction = default) where T : BaseEntity
+        public async Task<Result<M>> GetBy<T, M>(Expression<Func<T, object>> fieldSelector, object value, CancellationToken ct = default) where T : BaseEntity
         {
             var set = GetDbSet<T>();
 

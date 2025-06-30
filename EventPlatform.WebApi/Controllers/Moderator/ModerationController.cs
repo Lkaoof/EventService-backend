@@ -18,13 +18,13 @@ namespace EventPlatform.WebApi.Controllers.Moderator
     [Route("/moderation")]
     public class ModerationController(IMediator mediator, IEmailSender email) : ControllerApiBase
     {
-        [HttpGet("/moderated-events")]
+        [HttpGet("moderated-events")]
         public async Task<IActionResult> GetModeratedEvents([FromQuery] Pageable page, CancellationToken ct)
         {
             return Ok(await mediator.Send(new GetModerateEventsAsPageQuery() { Page = page }, ct));
         }
 
-        [HttpGet("/rejected-events")]
+        [HttpGet("rejected-events")]
         public async Task<IActionResult> GetRejectedEvents([FromQuery] Pageable page, CancellationToken ct)
         {
             return Ok(await mediator.Send(new GetRejectedEventsQuery() { Page = page }, ct));
